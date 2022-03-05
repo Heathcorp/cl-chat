@@ -1,15 +1,15 @@
-#include <stdio.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
 #include <pthread.h>
 
-#include "loops.c"
+#include "threads.c"
+#include "connection.c"
 
 int main(int argc, char *argv[])
 {
-	int socket_desc = socket(AF_INET , SOCK_STREAM , 0);
-	if (socket_desc == -1) {
-		puts("Failed to create socket");
+	int socket_desc;
+	if (argc > 1) {
+		socket_desc = create_client(argv[1]);
+	} else {
+		socket_desc = create_server();
 	}
 
 	pthread_t thread_recv, thread_send;

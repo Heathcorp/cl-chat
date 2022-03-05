@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <time.h>
 
 struct chat_message {
@@ -19,7 +20,7 @@ void* send_loop(int* socket_desc) {
     while (1) {
         // receive command line messages from the user
         // send it through the socket
-        printf("getline loop process, test num: %d\n", *socket_desc);
+        printf("send loop process, test num: %d\n", *socket_desc);
         break;
     }
 }
