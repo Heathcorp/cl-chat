@@ -1,6 +1,3 @@
-#include <sys/socket.h>
-#include <arpa/inet.h>
-
 int create_client(char* address) {
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd == -1) {
