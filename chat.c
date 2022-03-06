@@ -7,16 +7,18 @@
 
 int main(int argc, char *argv[])
 {
-	struct user_config me, sys;
-	me.username = "USER1";
+	struct user_data me, sys, other;
+	me.username = argv[1];
 	sys.username = "SYSTEM";
+	other.username = "TEST!";
 
 	struct thread_config conf;
-	conf.user = &me;
-	conf.sys = &sys;
+	conf.user_me = &me;
+	conf.user_sys = &sys;
+	conf.user_other = &other;
 
-	if (argc > 1) {
-		conf.sockfd = create_client(argv[1]);
+	if (argc > 2) {
+		conf.sockfd = create_client(argv[2]);
 	} else {
 		conf.sockfd = create_server();
 	}
