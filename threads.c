@@ -1,18 +1,19 @@
-#include <stdio.h>
-#include <time.h>
-#include <stdlib.h>
-
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-struct chat_message {
-    size_t size;
-    char* content;
+struct thread_config {
+    int sockfd;
+    struct user_config* user;
+    struct user_config* sys;
 };
 
-void* recv_loop(int* socket_desc) {
-    puts("Receive thread started");
-    int sockfd = *socket_desc;
+void* recv_routine(void* config) {    
+    struct thread_config* conf = (struct thread_config*)config;
+    int sockfd = conf->sockfd;
+    struct user_config* user = conf->user;
+    struct user_config* sys = conf->sys;
+
+    logmsg(sys, "Receive thread started");
 
     struct chat_message msg;
     while (recv(sockfd, &msg.size, sizeof(msg.size), 0) > 0) {
@@ -32,9 +33,13 @@ void* recv_loop(int* socket_desc) {
     }
 }
 
-void* send_loop(int* socket_desc) {
-    puts("Send thread started");
-    int sockfd = *socket_desc;
+void* send_routine(void* config) {    
+    struct thread_config* conf = (struct thread_config*)config;
+    int sockfd = conf->sockfd;
+    struct user_config* user = conf->user;
+    struct user_config* sys = conf->sys;
+
+    logmsg(sys, "Send thread started");
 
     struct chat_message msg;
     size_t n;

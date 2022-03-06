@@ -1,30 +1,39 @@
+#include <unistd.h>
 #include <pthread.h>
 
+#include "utils.c"
 #include "threads.c"
 #include "connection.c"
 
 int main(int argc, char *argv[])
 {
-	int socket_desc;
+	struct user_config me, sys;
+	me.username = "USER1";
+	sys.username = "SYSTEM";
+
+	struct thread_config conf;
+	conf.user = &me;
+	conf.sys = &sys;
+
 	if (argc > 1) {
-		socket_desc = create_client(argv[1]);
+		conf.sockfd = create_client(argv[1]);
 	} else {
-		socket_desc = create_server();
+		conf.sockfd = create_server();
 	}
 
-	puts("Connection created");
+	logmsg(&sys, "Connection created");
 
 	pthread_t thread_recv, thread_send;
-	if (pthread_create(&thread_recv, NULL, recv_loop, &socket_desc)) {
+	if (pthread_create(&thread_recv, NULL, recv_routine, &conf)) {
 		perror("Failed to create receive thread");
 	}
-	if (pthread_create(&thread_send, NULL, send_loop, &socket_desc)) {
+	if (pthread_create(&thread_send, NULL, send_routine, &conf)) {
 		perror("Failed to create send thread");
 	}
 
 	pthread_join(thread_recv, NULL);
 	pthread_join(thread_send, NULL);
 
-	puts("Closing chat");
-	close(socket_desc);
+	logmsg(&sys, "Closing chat");
+	close(conf.sockfd);
 }
