@@ -1,4 +1,5 @@
 struct thread_config {
+    int running;
     int sockfd;
     struct user_data* user_other;
     struct user_data* user_me;
@@ -17,7 +18,7 @@ void* recv_routine(void* config) {
     struct chat_message msg;
     char msgType;
 
-    while (recv(sockfd, &msgType, sizeof(msgType), 0) > 0) {
+    while (recv(sockfd, &msgType, sizeof(msgType), 0) > 0 && conf->running) {
         recvcontent(sockfd, &msg);
 
         switch (msgType) {
@@ -60,13 +61,18 @@ void* send_routine(void* config) {
     msg.size = 0;
 
     size_t n = 0;
-    while ((msg.size = getline(&msg.content, &n, stdin)) != -1) {
+    while ((msg.size = getline(&msg.content, &n, stdin)) != -1 && conf->running) {
         // printf("Sending %d bytes\n", msg.size);
 
-        // strip off newline the dodgy way:
-        msg.size--;
+        // replace newline with null terminator
+        msg.content[--msg.size] = '\0';
 
-        sendmessage(sockfd, M_MESSAGE, &msg);
+        if (strcmp(":q", msg.content) == 0) {
+            conf->running = 0;
+            logmsg(sys, "Recieved exit command");
+        } else {
+            sendmessage(sockfd, M_MESSAGE, &msg);
+        }
 
         free(msg.content);
         msg.content = NULL;
