@@ -9,6 +9,7 @@
 // types of messages sent between clients
 #define M_NAME 'n'
 #define M_MESSAGE 'm'
+#define M_CONNECTION 'c'
 
 struct user_data {
     char* username;

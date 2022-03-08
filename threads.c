@@ -69,7 +69,12 @@ void* send_routine(void* config) {
 
         if (strcmp(":q", msg.content) == 0) {
             conf->running = 0;
-            logmsg(sys, "Recieved exit command");
+            logmsg(sys, "Received exit command");
+
+            struct chat_message exit_msg;
+            exit_msg.content = "exit";
+            exit_msg.size = strlen(exit_msg.content);
+            sendmessage(sockfd, M_CONNECTION, &exit_msg);
         } else {
             sendmessage(sockfd, M_MESSAGE, &msg);
         }
