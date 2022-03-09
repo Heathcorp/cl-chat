@@ -18,7 +18,8 @@ void* recv_routine(void* config) {
     struct chat_message msg;
     char msgType;
 
-    while (recv(sockfd, &msgType, sizeof(msgType), 0) > 0 && conf->running) {
+    while (conf->running) {
+        if (recv(sockfd, &msgType, sizeof(msgType), 0) < 1) {conf->running = FALSE; break;}
         recvcontent(sockfd, &msg);
 
         switch (msgType) {
@@ -30,6 +31,11 @@ void* recv_routine(void* config) {
             case M_MESSAGE:
                 logmsg(other, msg.content);
                 break;
+            case M_CONNECTION:
+                if (strcmp(msg.content, "EXIT") == 0) {
+                    conf->running = FALSE;
+                    logmsg(sys, "Other user disconnected, press enter to close");
+                }
         }
 
 
@@ -38,6 +44,7 @@ void* recv_routine(void* config) {
         msg.size = 0;
     }
     
+    close(sockfd);
     free(other->username);
 }
 
@@ -61,18 +68,18 @@ void* send_routine(void* config) {
     msg.size = 0;
 
     size_t n = 0;
-    while ((msg.size = getline(&msg.content, &n, stdin)) != -1 && conf->running) {
+    while (conf->running && ((msg.size = getline(&msg.content, &n, stdin)) != -1) ) {
         // printf("Sending %d bytes\n", msg.size);
 
         // replace newline with null terminator
         msg.content[--msg.size] = '\0';
 
         if (strcmp(":q", msg.content) == 0) {
-            conf->running = 0;
+            conf->running = FALSE;
             logmsg(sys, "Received exit command");
 
             struct chat_message exit_msg;
-            exit_msg.content = "exit";
+            exit_msg.content = "EXIT";
             exit_msg.size = strlen(exit_msg.content);
             sendmessage(sockfd, M_CONNECTION, &exit_msg);
         } else {
@@ -84,4 +91,6 @@ void* send_routine(void* config) {
         msg.size = 0;
         n = 0;
     }
+
+    close(sockfd);
 }

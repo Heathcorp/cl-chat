@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 	conf.user_me = &me;
 	conf.user_sys = &sys;
 	conf.user_other = &other;
-	conf.running = 1;
+	conf.running = TRUE;
 
 	if (argc > 2) {
 		conf.sockfd = create_client(argv[2]);

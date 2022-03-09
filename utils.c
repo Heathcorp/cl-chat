@@ -6,6 +6,9 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
+#define FALSE 0
+#define TRUE 1
+
 // types of messages sent between clients
 #define M_NAME 'n'
 #define M_MESSAGE 'm'
