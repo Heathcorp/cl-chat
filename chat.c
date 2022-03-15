@@ -24,6 +24,14 @@ int main(int argc, char *argv[])
 		conf.sockfd = create_server();
 	}
 
+	char* address[32];
+	strcpy(address, argv[2]);	
+    char* portStr = strchr(address, ':');
+    puts(portStr);
+    portStr[0] = '\0';
+    int port = atoi(portStr+1);
+    printf("%s : %s --> %d\n", address, portStr+1, port);
+
 	logmsg(&sys, "Connection created");
 
 	pthread_t thread_recv, thread_send;
