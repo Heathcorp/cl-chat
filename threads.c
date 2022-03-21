@@ -1,5 +1,5 @@
 struct thread_config {
-    int running;
+    bool running;
     int sockfd;
     struct user_data* user_other;
     struct user_data* user_me;

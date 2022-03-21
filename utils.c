@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
+typedef int bool;
 #define FALSE 0
 #define TRUE 1
 

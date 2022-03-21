@@ -1,4 +1,4 @@
-int create_client(char* address) {
+int create_client(char* address, int port) {
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd == -1) {
         perror("Socket creation failed");
@@ -7,7 +7,7 @@ int create_client(char* address) {
     struct sockaddr_in servaddr;
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = inet_addr(address);
-    servaddr.sin_port = htons(8888);
+    servaddr.sin_port = htons(port);
 
     if (connect(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr)) != 0) {
         perror("Socket connect failed");
@@ -16,7 +16,7 @@ int create_client(char* address) {
     return sockfd;
 }
 
-int create_server() {
+int create_server(int port) {
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd == -1) {
         perror("Socket creation failed");
@@ -25,7 +25,7 @@ int create_server() {
     struct sockaddr_in servaddr;
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = INADDR_ANY;
-    servaddr.sin_port = htons(8888);
+    servaddr.sin_port = htons(port);
 
     if (bind(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr)) != 0) {
         perror("Socket bind failed");
