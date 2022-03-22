@@ -42,6 +42,11 @@ int main(int argc, char *argv[])
 		conf.sockfd = create_client(address, port);
 	}
 
+	if (conf.sockfd) {
+		logmsg(&sys, "Connection failed");
+		return -1;
+	}
+
 	logmsg(&sys, "Connection created");
 
 	// create the main receive and send threads
