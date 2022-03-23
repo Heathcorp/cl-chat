@@ -16,10 +16,12 @@ typedef int bool;
 #define M_CONNECTION 'c'
 
 struct user_data {
+    size_t name_length;
     char* username;
 };
 
 struct chat_message {
+    struct user_data* user;
     size_t size;
     char* content;
 };

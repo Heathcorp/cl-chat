@@ -58,6 +58,7 @@ void* send_routine(void* config) {
     logmsg(sys, "Send thread started");
 
     struct chat_message msg;
+    msg.user = me;
 
     // send my username
     msg.content = me->username;
