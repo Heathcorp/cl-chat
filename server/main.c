@@ -1,33 +1,31 @@
 #include "../vector.h"
 
-#include <unistd.h>
+#include <pthread.h>
 #include <poll.h>
 #include <stdio.h>
+
+#include <sys/socket.h>
+#include <arpa/inet.h>
 
 void* handle_connection(void* config) {
 
 }
 
 int main(int argc, char *argv[]) {
-	struct Vector* vector;
+	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
-	vector = vector_init(sizeof(int));
+	struct sockaddr_in servaddr;
+	servaddr.sin_family = AF_INET;
+	servaddr.sin_addr.s_addr = INADDR_ANY;
+	servaddr.sin_port = htons(3030);
 
-	int newElement = 7;
-	vector_push_back(vector, &newElement);
-	newElement = 25634;
-	vector_push_back(vector, &newElement);
-	newElement = 423;
-	vector_push_back(vector, &newElement);
-	newElement = 1234;
-	vector_push_back(vector, &newElement);
-	newElement = 2345;
-	vector_push_back(vector, &newElement);
-	newElement = 4576;
-	vector_push_back(vector, &newElement);
+	bind(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
 
-	for (int i = 0; i < vector->length; i++) {
-		int* element = (int*)(vector_get(vector, i));
-		printf("element %d: %d\n", i, *element);
+	listen(sockfd, 1000);
+
+	for (int i = 0; i < 1000; i++) {
+		int client_socket = accept(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
+
+		
 	}
 }
