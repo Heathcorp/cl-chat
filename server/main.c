@@ -7,8 +7,14 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-void* handle_connection(void* config) {
+struct thread_config {
+	int socket;
+	// etc
+};
 
+void* handle_connection(void* config) {
+	int sockfd = ((struct thread_config*)config)->socket;
+	printf("socket connected to client, client fd: %d\n", sockfd);
 }
 
 int main(int argc, char *argv[]) {
@@ -24,8 +30,12 @@ int main(int argc, char *argv[]) {
 	listen(sockfd, 1000);
 
 	for (int i = 0; i < 1000; i++) {
-		int client_socket = accept(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
+		int client_socket = accept(sockfd, NULL, NULL);
 
-		
+		struct thread_config conf;
+		conf.socket = client_socket;
+
+		pthread_t thread;
+		pthread_create(&thread, NULL, handle_connection, &conf);
 	}
 }
