@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 	vector_push_back(vector, &newElement);
 
 	for (int i = 0; i < vector->length; i++) {
-		int* element = (int*)(vector->data + vector->element_size * i);
+		int* element = (int*)(vector_get(vector, i));
 		printf("element %d: %d\n", i, *element);
 	}
 }

@@ -16,4 +16,6 @@ struct Vector* vector_init(size_t element_size);
 
 int vector_push_back(struct Vector* vector, void* element);
 
+void* vector_get(struct Vector* vector, size_t index);
+
 #endif

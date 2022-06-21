@@ -29,3 +29,7 @@ int vector_push_back(struct Vector* vector, void* element) {
 	vector->used += vector->element_size;
 	vector->length++;
 }
+
+void* vector_get(struct Vector* vector, size_t index) {
+    return vector->data + vector->element_size * index;
+}
