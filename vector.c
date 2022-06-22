@@ -1,6 +1,7 @@
 #include "vector.h"
 
 #include <string.h>
+#include <stdio.h>
 
 struct Vector* vector_init(size_t element_size) {
 	struct Vector* vector = (struct Vector*)malloc(sizeof(struct Vector));
@@ -15,7 +16,8 @@ struct Vector* vector_init(size_t element_size) {
 
 int vector_push_back(struct Vector* vector, void* element) {
 	if (vector->used >= vector->allocated) {
-		void* newdata = realloc(vector->data, vector->allocated * 2);
+		vector->allocated *= 2;
+		void* newdata = realloc(vector->data, vector->allocated);
 
 		if (newdata) {
 			vector->data = newdata;
@@ -31,5 +33,5 @@ int vector_push_back(struct Vector* vector, void* element) {
 }
 
 void* vector_get(struct Vector* vector, size_t index) {
-    return vector->data + vector->element_size * index;
+	return vector->data + vector->element_size * index;
 }
