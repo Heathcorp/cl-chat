@@ -1,4 +1,5 @@
-#include "../vector.h"
+#include "../common/vector.h"
+#include "handlers.c"
 
 #include <pthread.h>
 #include <poll.h>
@@ -12,9 +13,16 @@ struct thread_config {
 	// etc
 };
 
-void* handle_connection(void* config) {
+void* thread_routine(void* config) {
 	int sockfd = ((struct thread_config*)config)->socket;
-	printf("socket connected to client, client fd: %d\n", sockfd);
+
+	int thread_connection_count = 0;
+
+	while (1) {
+		int client_socket = accept(sockfd, NULL, NULL);
+		printf("New connection: fd:%d; count:%d\n", client_socket, ++thread_connection_count);
+		handle_connection(client_socket);
+	}
 }
 
 int main(int argc, char *argv[]) {
@@ -27,15 +35,23 @@ int main(int argc, char *argv[]) {
 
 	bind(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
 
-	listen(sockfd, 1000);
+	listen(sockfd, 300);
 
-	for (int i = 0; i < 1000; i++) {
-		int client_socket = accept(sockfd, NULL, NULL);
+	struct Vector* threads = vector_init(sizeof(pthread_t));
 
+	for (int i = 0; i < 300; i++) {
 		struct thread_config conf;
-		conf.socket = client_socket;
+		conf.socket = sockfd;
 
 		pthread_t thread;
-		pthread_create(&thread, NULL, handle_connection, &conf);
+		pthread_create(&thread, NULL, thread_routine, &conf);
+
+		vector_push_back(threads, &thread);
+	}
+
+	for (int i = 0; i < threads->length; i++) {
+		pthread_t thread = *(pthread_t*)vector_get(threads, i);
+
+		pthread_join(thread, NULL);
 	}
 }
