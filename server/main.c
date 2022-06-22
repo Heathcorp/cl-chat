@@ -50,8 +50,8 @@ int main(int argc, char *argv[]) {
 	}
 
 	for (int i = 0; i < threads->length; i++) {
-		pthread_t thread = *(pthread_t*)vector_get(threads, i);
+		pthread_t* thread = vector_get(threads, i);
 
-		pthread_join(thread, NULL);
+		pthread_join(*thread, NULL);
 	}
 }
