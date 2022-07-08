@@ -1,5 +1,5 @@
 #include "../common/vector.h"
-#include "handlers.c"
+#include "handlers.h"
 
 #include <pthread.h>
 #include <poll.h>
