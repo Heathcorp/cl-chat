@@ -8,23 +8,6 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-struct thread_config {
-	int socket;
-	// etc
-};
-
-void* thread_routine(void* config) {
-	int sockfd = ((struct thread_config*)config)->socket;
-
-	int thread_connection_count = 0;
-
-	while (1) {
-		int client_socket = accept(sockfd, NULL, NULL);
-		printf("New connection: fd:%d; count:%d\n", client_socket, ++thread_connection_count);
-		handle_connection(client_socket);
-	}
-}
-
 int main(int argc, char *argv[]) {
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
