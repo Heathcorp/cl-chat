@@ -1,0 +1,35 @@
+This document outlines the bespoke message protocol and format used by this program.
+
+Each control message starts with a single character command code, followed by a newline, then a 64bit number showing the local time of the message, then another newline.
+
+When a client wants to connect to a server and sit idle, the client sends a "register command", the contents are as follows:
+R                   (command code)
+[TIME]              (sender timestamp (8 bytes))
+[USERNAME LENGTH]   (length of outgoing username (1 byte))
+"USERNAME"          (username string)
+                    (empty line)
+
+When a client wants to send a message to another user, the client sends a "message command" to a server:
+M                   (command code)
+[TIME]              (sender timestamp (8 bytes))
+"TARGET USERNAME"   (target username string)
+[MESSAGE LENGTH]    (length of outgoing message (1 byte))
+"MESSAGE CONTENTS"  (the message contents as a string)
+                    (empty line)
+
+When a server wants to forward a message to a client, the server sends a "forward command" to a client:
+F                   (command code)
+[TIME]              (sender timestamp (8 bytes))
+[TIME]              (server received timestamp (8 bytes))
+[TIME]              (server forwarded timestamp (8 bytes))
+"SENDER USERNAME"   (sender username string)
+[MESSAGE LENGTH]    (length of message (1 byte))
+"MESSAGE CONTENTS"  (the message contents as a string)
+                    (empty line)
+
+When a client or server wants to disconnect, they send a "disconnect command":
+Q                   (command code)
+[TIME]              (sender timestamp (8 bytes))
+<REASON>            (reason for disconnect (single character))
+                    (empty line)
+
