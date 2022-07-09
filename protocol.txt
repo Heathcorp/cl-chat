@@ -19,13 +19,15 @@ M                   (command code)
 
 When a server wants to forward a message to a client, the server sends a "forward command" to a client:
 F                   (command code)
-[TIME]              (sender timestamp (8 bytes))
-[TIME]              (server received timestamp (8 bytes))
 [TIME]              (server forwarded timestamp (8 bytes))
+[TIME]              (server received timestamp (8 bytes))
+[TIME]              (original sender timestamp (8 bytes))
 "SENDER USERNAME"   (sender username string)
 [MESSAGE LENGTH]    (length of message (1 byte))
 "MESSAGE CONTENTS"  (the message contents as a string)
                     (empty line)
+
+Note that the latest timestamp is sent first.
 
 When a client or server wants to disconnect, they send a "disconnect command":
 Q                   (command code)
