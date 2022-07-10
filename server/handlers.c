@@ -17,5 +17,5 @@ void* thread_routine(void* config) {
 }
 
 int handle_connection(int sockfd) {
-    return 0;
+	return 0;
 }
