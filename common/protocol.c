@@ -27,5 +27,6 @@ int protocol_command(int sockfd, char code, void* contents, size_t bufsize) {
 
 	buf[n - 1] = '\n';
 
-	// TODO: actually send the message
+	// send the message
+	send(sockfd, buf, n, NULL);
 }
