@@ -30,3 +30,10 @@ int protocol_command(int sockfd, char code, void* contents, size_t bufsize) {
 	// send the message
 	send(sockfd, buf, n, NULL);
 }
+
+int send_disconnect(int sockfd, char reason) {
+	char* buf = " ";
+	buf[0] = reason;
+
+	return protocol_command(sockfd, 'Q', buf, 1);
+}
