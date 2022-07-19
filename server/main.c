@@ -1,4 +1,6 @@
 #include "../common/vector.h"
+#include "../common/protocol.h"
+#include "../common/utils.h"
 #include "handlers.h"
 
 #include <pthread.h>
@@ -9,6 +11,9 @@
 #include <arpa/inet.h>
 
 int main(int argc, char *argv[]) {
+	puts("STARTING...");
+	send_register(0, "heathmanning", 12);
+
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
 	struct sockaddr_in servaddr;

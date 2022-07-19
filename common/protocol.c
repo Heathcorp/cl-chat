@@ -1,3 +1,4 @@
+#include "utils.h"
 #include "protocol.h"
 
 #include <sys/socket.h>
@@ -5,12 +6,6 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include <string.h>
-
-time_t millis() {
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
-}
 
 int protocol_command(int sockfd, char code, void* contents, size_t bufsize) {
 	time_t ms = millis();
@@ -30,6 +25,9 @@ int protocol_command(int sockfd, char code, void* contents, size_t bufsize) {
 	memcpy(buf + 11, contents, bufsize);
 
 	buf[n - 1] = '\n';
+
+	// debug print:
+	hexdump((void*)buf, n, 4);
 
 	// send the message
 	send(sockfd, buf, n, 0);

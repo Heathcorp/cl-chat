@@ -1,8 +1,8 @@
-server: server/main.o common/vector.o server/handlers.o common/protocol.o
-	gcc -pthread -o server.out server/main.o common/vector.o server/handlers.o common/protocol.o
+server: server/main.o common/vector.o server/handlers.o common/protocol.o common/utils.o
+	gcc -pthread -o server.out server/main.o common/vector.o server/handlers.o common/protocol.o common/utils.o
 
-client: client/main.o common/protocol.o
-	gcc -pthread -o client.out client/main.o common/protocol.o
+client: client/main.o common/protocol.o common/utils.o
+	gcc -pthread -o client.out client/main.o common/protocol.o common/utils.o
 
 clean:
 	rm -f *.o

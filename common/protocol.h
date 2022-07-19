@@ -1,7 +1,7 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
-#include <time.h>
+#include <sys/time.h>
 
 // TODO: change code to an enum, actually implement all these functions
 int protocol_command(int sockfd, char code, void* contents, size_t bufsize);
