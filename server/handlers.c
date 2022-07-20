@@ -1,4 +1,5 @@
 #include "handlers.h"
+#include "../common/protocol.h"
 
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -17,5 +18,8 @@ void* thread_routine(void* config) {
 }
 
 int handle_connection(int sockfd) {
+	struct message_t msg;
+	read_message(sockfd, &msg);
+
 	return 0;
 }

@@ -1,10 +1,14 @@
+#include "../common/protocol.h"
+#include "../common/utils.h"
+
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
 int main(int argc, char* argv[]) {
-	for (int i = 0; i < 200; i++) {
+	for (int i = 0; i < 1; i++) {
 		int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
 		struct sockaddr_in servaddr;
@@ -14,6 +18,8 @@ int main(int argc, char* argv[]) {
 
 		printf("Attempting connection %d\n", i);
 		connect(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
+
+		send_register(sockfd, "grouchy garry", 13);
 
 		close(sockfd);
 	}

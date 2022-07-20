@@ -2,6 +2,7 @@
 #define PROTOCOL_H
 
 #include <sys/time.h>
+#include <stddef.h>
 
 // TODO: change code to an enum, actually implement all these functions
 int protocol_command(int sockfd, char code, void* contents, size_t bufsize);
@@ -16,11 +17,16 @@ int send_forward(int sockfd, time_t timestamp, char* sender, size_t sendersize, 
 int send_disconnect(int sockfd, char reason);
 
 // TODO: refine this
-struct message {
+struct message_t {
 	time_t sent_time;
 	char* target_user;
 	char* sender_user;
 	char* contents;
-}
+};
+
+struct message_t* create_message();
+void free_message(struct message_t* message);
+
+int read_message(int sockfd, struct message_t* msg);
 
 #endif
