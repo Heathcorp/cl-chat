@@ -12,7 +12,6 @@
 
 int main(int argc, char *argv[]) {
 	puts("STARTING...");
-	send_register(0, "heathmanning", 12);
 
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
