@@ -9,15 +9,17 @@ time_t millis() {
 	return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 }
 
-int hexdump(void* buf, size_t bufsize, size_t rowsize) {
-	remove_ctrl((char*)buf, bufsize, ' ');
+int hexdump(void* buf, size_t bufsize, size_t columns) {
+	char* text = malloc(bufsize);
+	memcpy(text, buf, bufsize);
+	remove_ctrl(text, bufsize, ' ');
 
-	for(size_t i = 0; i < bufsize; i += rowsize) {
-		for(int j = 0; j < rowsize; j++) {
-			printf("%02X ", (int)*(char*)(buf + i + j));
+	for(size_t i = 0; i < bufsize; i += columns) {
+		for(int j = 0; j < columns; j++) {
+			printf("%02hhX ", *(char*)(buf + i + j));
 		}
 
-		printf("| %.*s\n", rowsize, buf + i);
+		printf("| %.*s\n", (int)columns, text + i);
 	}
 
 	return 0;
