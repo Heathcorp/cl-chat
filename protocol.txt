@@ -7,25 +7,22 @@ R                   (command code)
 [TIME]              (sender timestamp (8 bytes))
 [USERNAME LENGTH]   (length of outgoing username (1 byte))
 "USERNAME"          (username string)
-                    (empty line)
+EOT (ascii char 4)
 
 When a client wants to send a message to another user, the client sends a "message command" to a server:
+This is also used when a server wants to forward a message to another server or client:
 M                   (command code)
-[TIME]              (sender timestamp (8 bytes))
-"TARGET USERNAME"   (target username string)
-[MESSAGE LENGTH]    (length of outgoing message (1 byte))
-"MESSAGE CONTENTS"  (the message contents as a string)
-                    (empty line)
-
-When a server wants to forward a message to a client or another server, the server sends a "forward command":
-F                   (command code)
-[TIME]              (server forwarded timestamp (8 bytes))
 [TIME]              (original sender timestamp (8 bytes))
 "TARGET USERNAME"   (target username string)
 "SENDER USERNAME"   (sender username string)
-[MESSAGE LENGTH]    (length of message (1 byte))
+[MESSAGE LENGTH]    (length of outgoing message (1 byte))
 "MESSAGE CONTENTS"  (the message contents as a string)
-                    (empty line)
+EOT (ascii char 4)  (put an EOT here if no extra stuff)
+[HOP 1 TIMESTAMP]   (time of 1st hop (8 bytes))
+[HOP 2 TIMESTAMP]   (time of 2nd hop (8 bytes))
+[HOP 3 TIMESTAMP]   (time of 3rd hop (8 bytes))
+...
+EOT (ascii char 4)  (end of transmission char)
 
 Note that the latest timestamp is always sent first.
 
@@ -33,5 +30,4 @@ When a client or server wants to disconnect, they send a "disconnect command":
 Q                   (command code)
 [TIME]              (sender timestamp (8 bytes))
 <REASON>            (reason for disconnect (single character))
-                    (empty line)
-
+EOT (ascii char 4)
