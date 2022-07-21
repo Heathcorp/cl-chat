@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-struct Vector {
+struct vector {
 	size_t element_size;
 	size_t length;
 
@@ -12,10 +12,10 @@ struct Vector {
 	void* data;
 };
 
-struct Vector* vector_init(size_t element_size);
+struct vector* vector_init(size_t element_size);
 
-int vector_push_back(struct Vector* vector, void* element);
+int vector_push_back(struct vector* vector, void* element);
 
-void* vector_get(struct Vector* vector, size_t index);
+void* vector_get(struct vector* vector, size_t index);
 
 #endif

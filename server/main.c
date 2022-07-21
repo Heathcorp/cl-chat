@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
 
 	listen(sockfd, 300);
 
-	struct Vector* threads = vector_init(sizeof(pthread_t));
+	struct vector* threads = vector_init(sizeof(pthread_t));
 
 	for (int i = 0; i < 300; i++) {
 		struct thread_config conf;

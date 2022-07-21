@@ -3,35 +3,35 @@
 #include <string.h>
 #include <stdio.h>
 
-struct Vector* vector_init(size_t element_size) {
-	struct Vector* vector = (struct Vector*)malloc(sizeof(struct Vector));
+struct vector* vector_init(size_t element_size) {
+	struct vector* vec = (struct vector*)malloc(sizeof(struct vector));
 
-	vector->element_size = element_size;
-	vector->length = 0;
+	vec->element_size = element_size;
+	vec->length = 0;
 
-	vector->used = 0;
-	vector->allocated = element_size;
-	vector->data = malloc(element_size);
+	vec->used = 0;
+	vec->allocated = element_size;
+	vec->data = malloc(element_size);
 }
 
-int vector_push_back(struct Vector* vector, void* element) {
-	if (vector->used >= vector->allocated) {
-		vector->allocated *= 2;
-		void* newdata = realloc(vector->data, vector->allocated);
+int vector_push_back(struct vector* vec, void* element) {
+	if (vec->used >= vec->allocated) {
+		vec->allocated *= 2;
+		void* newdata = realloc(vec->data, vec->allocated);
 
 		if (newdata) {
-			vector->data = newdata;
+			vec->data = newdata;
 		} else {
 			return -1;
 		}
 	}
 
-	memcpy(vector->data + vector->used, element, vector->element_size);
+	memcpy(vec->data + vec->used, element, vec->element_size);
 
-	vector->used += vector->element_size;
-	vector->length++;
+	vec->used += vec->element_size;
+	vec->length++;
 }
 
-void* vector_get(struct Vector* vector, size_t index) {
-	return vector->data + vector->element_size * index;
+void* vector_get(struct vector* vec, size_t index) {
+	return vec->data + vec->element_size * index;
 }
