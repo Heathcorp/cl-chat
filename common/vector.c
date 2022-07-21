@@ -15,14 +15,10 @@ struct vector* vector_init(size_t element_size) {
 }
 
 int vector_push_back(struct vector* vec, void* element) {
-	if (vec->used >= vec->allocated) {
-		vec->allocated *= 2;
-		void* newdata = realloc(vec->data, vec->allocated);
-
-		if (newdata) {
-			vec->data = newdata;
-		} else {
-			return -1;
+	if(vec->used >= vec->allocated) {
+		int i;
+		if(i = vector_resize(vec, 2 * vec->allocated * vec->element_size)) {
+			return i;
 		}
 	}
 
@@ -34,4 +30,20 @@ int vector_push_back(struct vector* vec, void* element) {
 
 void* vector_get(struct vector* vec, size_t index) {
 	return vec->data + vec->element_size * index;
+}
+
+int vector_resize(struct vector* vec, size_t length) {
+	size_t newsize = length * vec->element_size;
+	if(newsize < vec->used) {
+		return -1;
+	}
+
+	vec->allocated = newsize;
+	void* newdata = realloc(vec->data, vec->allocated);
+
+	if(newdata) {
+		vec->data = newdata;
+	} else {
+		return -1;
+	}
 }

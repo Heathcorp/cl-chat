@@ -18,4 +18,6 @@ int vector_push_back(struct vector* vector, void* element);
 
 void* vector_get(struct vector* vector, size_t index);
 
+int vector_resize(struct vector* vec, size_t length);
+
 #endif
