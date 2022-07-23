@@ -19,4 +19,7 @@ int remove_ctrl(char* buf, size_t bufsize, char replace);
 
 #define EOT '\x04'
 
+#define TRUE	1
+#define FALSE	0
+
 #endif
