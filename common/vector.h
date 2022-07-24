@@ -13,6 +13,7 @@ struct vector {
 };
 
 struct vector* vector_init(size_t element_size);
+int vector_free(struct vector* vec);
 
 int vector_push_back(struct vector* vector, void* element);
 

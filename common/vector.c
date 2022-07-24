@@ -14,6 +14,11 @@ struct vector* vector_init(size_t element_size) {
 	vec->data = malloc(element_size);
 }
 
+int vector_free(struct vector* vec) {
+	free(vec->data);
+	free(vec);
+}
+
 int vector_push_back(struct vector* vec, void* element) {
 	if(vec->used >= vec->allocated) {
 		int i;
