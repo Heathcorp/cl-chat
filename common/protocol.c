@@ -9,22 +9,19 @@
 #include <string.h>
 
 int protocol_command(int sockfd, char code, void* contents, size_t bufsize) {
-	time_t ms = millis();
-
 	// size of final buffer to write to the socket
-	size_t n = 11 + bufsize + 2;
+	size_t n = 19 + bufsize + 2;
 
 	char* buf = malloc(n);
 
 	buf[0] = code;
 	buf[1] = '\n';
-	// write the timestamp, TODO: switch this to the string representation for portability?
-	// TODO: definitely switch to hex or similar encoding
-	memcpy(buf + 2, &ms, 8);
-	buf[10] = '\n';
+	// write the timestamp in hex
+	write_timestamp(buf + 2);
+	buf[18] = '\n';
 
 	// write the contents
-	memcpy(buf + 11, contents, bufsize);
+	memcpy(buf + 19, contents, bufsize);
 
 	buf[n - 2] = '\n';
 	buf[n - 1] = EOT;

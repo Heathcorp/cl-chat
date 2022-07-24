@@ -9,6 +9,16 @@ time_t millis() {
 	return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 }
 
+int write_timestamp(char* dest) {
+	char* charset = "0123456789abcdef";
+	time_t t = millis();
+
+	for(int i = 15; i > -1; i--) {
+		dest[i] = charset[t & 0b1111];
+		t >>= 4;
+	}
+}
+
 int hexdump(void* buf, size_t bufsize, size_t columns) {
 	char* text = malloc(bufsize);
 	memcpy(text, buf, bufsize);
