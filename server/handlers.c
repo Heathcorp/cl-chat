@@ -1,5 +1,8 @@
 #include "handlers.h"
 #include "../common/protocol.h"
+#include "../common/trans_buffer.h"
+#include "../common/vector.h"
+#include "../common/utils.h"
 
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -18,8 +21,22 @@ void* thread_routine(void* config) {
 }
 
 int handle_connection(int sockfd) {
-	struct message_t msg;
-	read_message(sockfd, &msg);
+	struct vector* buf = vector_init(1);
+	struct trans_buffer* trans_buf = trans_buffer_init();
 
+	trans_buffer_read(trans_buf, sockfd, buf);
+	hexdump(buf->data, buf->length, 8);
+
+	trans_buffer_read(trans_buf, sockfd, buf);
+	hexdump(buf->data, buf->length, 8);
+	
+	trans_buffer_read(trans_buf, sockfd, buf);
+	hexdump(buf->data, buf->length, 8);
+	
+	trans_buffer_read(trans_buf, sockfd, buf);
+	hexdump(buf->data, buf->length, 8);
+
+	vector_free(buf);
+	trans_buffer_free(trans_buf);
 	return 0;
 }

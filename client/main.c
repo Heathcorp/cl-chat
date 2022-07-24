@@ -21,18 +21,8 @@ int main(int argc, char* argv[]) {
 
 		send_register(sockfd, "grouchy garry", 13);
 		send_register(sockfd, "hangry henry", 12);
-		send_register(sockfd, "grouchy garry", 13);
-		send_register(sockfd, "hangry henry", 12);
-		send_register(sockfd, "grouchy garry", 13);
-		send_register(sockfd, "hangry henry", 12);
-		send_register(sockfd, "grouchy garry", 13);
-		send_register(sockfd, "hangry henry", 12);
-		send_register(sockfd, "grouchy garry", 13);
-		send_register(sockfd, "hangry henry", 12);
-		send_register(sockfd, "grouchy garry", 13);
-		send_register(sockfd, "hangry henry", 12);
-		send_register(sockfd, "grouchy garry", 13);
-		send_register(sockfd, "hangry henry", 12);
+		send_register(sockfd, "Angry Angus", 11);
+		send_register(sockfd, "Smokin Sam", 10);
 
 		close(sockfd);
 	}

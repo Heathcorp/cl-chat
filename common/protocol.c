@@ -19,6 +19,7 @@ int protocol_command(int sockfd, char code, void* contents, size_t bufsize) {
 	buf[0] = code;
 	buf[1] = '\n';
 	// write the timestamp, TODO: switch this to the string representation for portability?
+	// TODO: definitely switch to hex or similar encoding
 	memcpy(buf + 2, &ms, 8);
 	buf[10] = '\n';
 
