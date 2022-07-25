@@ -7,6 +7,7 @@
 time_t millis();
 // writes a 16 character hexadecimal representation of the current time to dest
 int write_timestamp(char* dest);
+time_t get_timestamp(char* src);
 
 int hexdump(void* buf, size_t bufsize, size_t rowsize);
 
