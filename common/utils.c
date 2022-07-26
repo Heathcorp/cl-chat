@@ -38,7 +38,7 @@ int hexdump(void* buf, size_t bufsize, size_t columns) {
 
 	for(size_t i = 0; i < bufsize; i += columns) {
 		for(int j = 0; j < columns; j++) {
-			printf("%02hhX ", *(char*)(buf + i + j));
+			printf(j + i < bufsize ? "%02hhX " : "   ", *(char*)(buf + i + j));
 		}
 
 		printf("| %.*s\n", (int)columns, text + i);
