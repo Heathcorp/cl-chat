@@ -1,5 +1,6 @@
 #include "utils.h"
 #include "protocol.h"
+#include "trans_buffer.h"
 
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -115,7 +116,7 @@ void free_message(struct message_t* msg) {
 	free(msg);
 }
 
-int read_message(int sockfd, struct message_t* msg) {
+int recv_message(int sockfd, struct message_t* msg) {
 	char* buf = malloc(100);
 	char msg_type = COMMS_DEBUG;
 

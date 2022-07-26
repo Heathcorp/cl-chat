@@ -22,18 +22,18 @@ void* thread_routine(void* config) {
 
 int handle_connection(int sockfd) {
 	struct vector* buf = vector_init(1);
-	struct trans_buffer* trans_buf = trans_buffer_init();
+	struct trans_buffer* trans_buf = trans_buffer_init(sockfd);
 
-	trans_buffer_read(trans_buf, sockfd, buf);
+	trans_buffer_read(trans_buf, buf);
 	hexdump(buf->data, buf->length, 8);
 
-	trans_buffer_read(trans_buf, sockfd, buf);
+	trans_buffer_read(trans_buf, buf);
 	hexdump(buf->data, buf->length, 8);
 	
-	trans_buffer_read(trans_buf, sockfd, buf);
+	trans_buffer_read(trans_buf, buf);
 	hexdump(buf->data, buf->length, 8);
 	
-	trans_buffer_read(trans_buf, sockfd, buf);
+	trans_buffer_read(trans_buf, buf);
 	hexdump(buf->data, buf->length, 8);
 
 	vector_free(buf);

@@ -7,8 +7,10 @@
 #include <arpa/inet.h>
 #include <stdbool.h>
 
-struct trans_buffer* trans_buffer_init() {
+struct trans_buffer* trans_buffer_init(int sockfd) {
 	struct trans_buffer* obj = malloc(sizeof(struct trans_buffer));
+
+	obj->sockfd = sockfd;
 
 	obj->allocated = TRANS_BUFFER_SIZE;
 	obj->data = malloc(obj->allocated);
@@ -39,11 +41,11 @@ size_t copyUntilEOT(char* dest, char* src, size_t max) {
 	return i;
 }
 
-int trans_buffer_read(struct trans_buffer* obj, int sockfd, struct vector* vec) {
+int trans_buffer_read(struct trans_buffer* obj, struct vector* vec) {
 	if(!obj->containsUnread) {
 		// need to read in data from the socket into the buffer
 		// read in the max (not sure whether good practice)
-		size_t recved = recv(sockfd, obj->data, obj->allocated, 0);
+		size_t recved = recv(obj->sockfd, obj->data, obj->allocated, 0);
 		// TODO: handle errors (recved = -1)
 		obj->length = recved;
 		obj->containsUnread = TRUE;
