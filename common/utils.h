@@ -9,6 +9,14 @@ time_t millis();
 int write_timestamp(char* dest);
 time_t get_timestamp(char* src);
 
+// read and write a single byte as a 2 digit hex number
+int write_hex_byte(char byte, char* dest);
+char get_hex_byte(char* src);
+
+// convert a single hexadecimal character digit to an int
+char hexchar2num(char hex);
+char num2hexchar(int digit);
+
 int hexdump(void* buf, size_t bufsize, size_t rowsize);
 
 int replace_char(char* buf, size_t bufsize, char target, char replace);

@@ -23,12 +23,33 @@ time_t get_timestamp(char* src) {
 	time_t t = 0;
 
 	for(int i = 60; i >= 0; i -= 4) {
-		char c = *(src++);
-		char hexdigit = (c >= 'a') ? (c - 87) : (c - '0');
+		char hexdigit = hexchar2num(*(src++));
 		t += (long)hexdigit << i;
 	}
 	
 	return t;
+}
+
+int write_hex_byte(char byte, char* dest) {
+	dest[1] = num2hexchar(byte);
+	byte >>= 4;
+	dest[0] = num2hexchar(byte);
+}
+
+char get_hex_byte(char* src) {
+	char byte = hexchar2num(src[0]) << 4;
+	byte += hexchar2num(src[1]);
+	return byte;
+}
+
+char hexchar2num(char hex) {
+	// TODO: check for dodgy values
+	return (hex >= 'a') ? (hex - 87) : (hex - '0');
+}
+
+char num2hexchar(int digit) {
+	char* charset = "0123456789abcdef";
+	return charset[digit & 0b1111];
 }
 
 int hexdump(void* buf, size_t bufsize, size_t columns) {
