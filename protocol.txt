@@ -4,7 +4,7 @@ Each control message starts with a single character command code, followed by a 
 
 When a client wants to connect to a server and sit idle, the client sends a "register command", the contents are as follows:
 R                   (command code)
-[TIME]              (sender timestamp (8 bytes))
+[TIME]              (sender timestamp (16 char hex))
 [USERNAME LENGTH]   (length of outgoing username (1 byte))
 "USERNAME"          (username string)
 EOT (ascii char 4)
@@ -12,15 +12,15 @@ EOT (ascii char 4)
 When a client wants to send a message to another user, the client sends a "message command" to a server:
 This is also used when a server wants to forward a message to another server or client:
 M                   (command code)
-[TIME]              (original sender timestamp (8 bytes))
+[TIME]              (original sender timestamp (16 char hex))
 "TARGET USERNAME"   (target username string)
 "SENDER USERNAME"   (sender username string)
-[MESSAGE LENGTH]    (length of outgoing message (1 byte))
+[MESSAGE LENGTH]    (length of outgoing message (2 char hex))
 "MESSAGE CONTENTS"  (the message contents as a string)
 EOT (ascii char 4)  (put an EOT here if no extra stuff)
-[HOP 1 TIMESTAMP]   (time of 1st hop (8 bytes))
-[HOP 2 TIMESTAMP]   (time of 2nd hop (8 bytes))
-[HOP 3 TIMESTAMP]   (time of 3rd hop (8 bytes))
+[HOP 1 TIMESTAMP]   (time of 1st hop (16 char hex))
+[HOP 2 TIMESTAMP]   (time of 2nd hop (16 char hex))
+[HOP 3 TIMESTAMP]   (time of 3rd hop (16 char hex))
 ...
 EOT (ascii char 4)  (end of transmission char)
 
@@ -28,6 +28,6 @@ Note that the latest timestamp is always sent first.
 
 When a client or server wants to disconnect, they send a "disconnect command":
 Q                   (command code)
-[TIME]              (sender timestamp (8 bytes))
-<REASON>            (reason for disconnect (single character))
+[TIME]              (sender timestamp (16 char hex))
+<REASON>            (reason for disconnect)
 EOT (ascii char 4)

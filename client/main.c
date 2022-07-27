@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 		printf("Attempting connection %d\n", i);
 		connect(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
 
-		send_register(sockfd, "grouchy garry", 13);
+		send_register(sockfd, "grouchy garry guards greatly", 28);
 		send_register(sockfd, "hangry henry", 12);
 		send_register(sockfd, "Angry Angus", 11);
 		send_register(sockfd, "Smokin Sam", 10);

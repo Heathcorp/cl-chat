@@ -9,9 +9,9 @@ time_t millis() {
 	return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 }
 
-int write_timestamp(char* dest) {
+// TODO: fix this to work with any given time
+int write_timestamp(char* dest, time_t t) {
 	char* charset = "0123456789abcdef";
-	time_t t = millis();
 
 	for(int i = 15; i > -1; i--) {
 		dest[i] = charset[t & 0b1111];

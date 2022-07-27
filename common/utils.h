@@ -6,7 +6,7 @@
 
 time_t millis();
 // writes a 16 character hexadecimal representation of the current time to dest
-int write_timestamp(char* dest);
+int write_timestamp(char* dest, time_t t);
 time_t get_timestamp(char* src);
 
 // read and write a single byte as a 2 digit hex number
