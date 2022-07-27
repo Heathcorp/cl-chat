@@ -28,7 +28,7 @@ int protocol_command(int sockfd, char code, void* contents, size_t bufsize) {
 	buf[n - 1] = EOT;
 
 	// debug print:
-	hexdump((void*)buf, n, 4);
+	hexdump((void*)buf, n, 8);
 
 	// send the message
 	send(sockfd, buf, n, 0);
@@ -116,17 +116,16 @@ void free_message(struct message_t* msg) {
 	free(msg);
 }
 
-int recv_message(int sockfd, struct message_t* msg) {
-	char* buf = malloc(100);
+int recv_message(struct trans_buffer* trans_buf, struct message_t* msg) {
+	struct vector* vec = vector_init(1);
 	char msg_type = COMMS_DEBUG;
 
-	size_t r = recv(sockfd, buf, 100, 0);
-	printf("READ %ld BYTES FROM SOCKET %d\n", r, sockfd);
-	hexdump(buf, r, 8);
+	trans_buffer_read(trans_buf, vec);
+	printf("READ %ld BYTES FROM SOCKET\n", vec->length);
+	hexdump(vec->data, vec->used, 8);
 
-	// extract the message type char and the timestamp (this segfaults)
-	msg_type = buf[0];
-	memcpy(&msg->sent_time, buf + 2, 8);
+	msg_type = *(char*)(vec->data + 0);
+	msg->sent_time = get_timestamp(vec->data + 2);
 
 	printf("RECEIVING %c MESSAGE\n", msg_type);
 	printf("SENT AT %ld\n", msg->sent_time);
@@ -144,6 +143,4 @@ int recv_message(int sockfd, struct message_t* msg) {
 			puts("CONNECTION ERROR");
 			break;
 	}
-
-	free(buf);
 }

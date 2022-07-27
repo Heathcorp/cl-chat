@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 struct trans_buffer* trans_buffer_init(int sockfd) {
 	struct trans_buffer* obj = malloc(sizeof(struct trans_buffer));

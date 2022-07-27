@@ -1,6 +1,8 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
+#include "trans_buffer.h"
+
 #include <sys/time.h>
 #include <stddef.h>
 
@@ -27,6 +29,6 @@ struct message_t {
 struct message_t* create_message();
 void free_message(struct message_t* message);
 
-int read_message(int sockfd, struct message_t* msg);
+int recv_message(struct trans_buffer* trans_buf, struct message_t* msg);
 
 #endif
