@@ -45,14 +45,14 @@ int send_disconnect(int sockfd, char reason) {
 }
 
 int send_register(int sockfd, char* username, size_t bufsize) {
-	size_t n = bufsize + 2;
+	size_t n = bufsize + 3;
 	char* buf = malloc(n);
 
 	// write the username length
-	buf[0] = (char)bufsize;
-	buf[1] = '\n';
+	write_hex_byte((char)bufsize, buf);
+	buf[2] = '\n';
 	// add the username
-	memcpy(buf + 2, username, bufsize);
+	memcpy(buf + 3, username, bufsize);
 
 	int ret = protocol_command(sockfd, 'R', buf, n);
 	free(buf);
