@@ -1,11 +1,19 @@
-server: server/main.o common/vector.o server/handlers.o common/protocol.o common/utils.o common/trans_buffer.o
-	gcc -g -pthread -o server.out server/main.o common/vector.o server/handlers.o common/protocol.o common/utils.o common/trans_buffer.o
+.PHONY: clean
 
-client: client/main.o common/vector.o common/protocol.o common/utils.o common/trans_buffer.o
-	gcc -g -pthread -o client.out client/main.o common/vector.o common/protocol.o common/utils.o common/trans_buffer.o
+COMMON = $(subst .c,.o,$(wildcard common/*.c))
+SERVER = $(subst .c,.o,$(wildcard server/*.c))
+CLIENT = $(subst .c,.o,$(wildcard client/*.c))
+
+%.o: %.c
+	gcc -g -c -o $@ $^
+
+server: $(COMMON) $(SERVER)
+	gcc -g -pthread -o $@.out $^
+
+client: $(COMMON) $(CLIENT)
+	gcc -g -pthread -o $@.out $^
 
 clean:
-	rm -f *.o
+	rm -f common/*.o
 	rm -f server/*.o
 	rm -f client/*.o
-	rm -f common/*.o
