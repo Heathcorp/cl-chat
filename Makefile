@@ -13,6 +13,8 @@ server: $(COMMON) $(SERVER)
 client: $(COMMON) $(CLIENT)
 	gcc -g -pthread -o $@.out $^
 
+all: server client
+
 clean:
 	rm -f common/*.o
 	rm -f server/*.o
