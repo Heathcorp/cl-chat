@@ -28,6 +28,6 @@ struct trans_buffer* trans_buffer_init(int sockfd);
 int trans_buffer_free(struct trans_buffer* obj);
 
 // reads a transmission from socket into vec
-int trans_buffer_read(struct trans_buffer* obj, struct vector* vec);
+int trans_buffer_recv(struct trans_buffer* obj, struct vector* vec);
 
 #endif

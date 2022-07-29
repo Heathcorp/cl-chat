@@ -21,11 +21,30 @@ void* thread_routine(void* config) {
 }
 
 int handle_connection(int sockfd) {
+	// TODO: put this in its own recv thread
+	struct vector* vec = vector_init(1);
 	struct trans_buffer* trans_buf = trans_buffer_init(sockfd);
 
-	struct message_t* msg = create_message();
-	recv_message(trans_buf, msg);
+	trans_buffer_recv(trans_buf, vec);
+
+	// handle the message
+	char msg_type = vec->data[0];
+
+	switch(msg_type) {
+		case COMMS_MESSAGE:
+			
+			break;
+		case COMMS_REGISTER:
+			break;
+		case COMMS_DISCONNECT:
+			break;
+		case COMMS_DEBUG:
+		default:
+			puts("CONNECTION ERROR");
+			break;
+	}
 
 	trans_buffer_free(trans_buf);
+	vector_free(vec);
 	return 0;
 }

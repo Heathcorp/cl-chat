@@ -42,7 +42,7 @@ size_t copyUntilEOT(char* dest, char* src, size_t max) {
 	return i;
 }
 
-int trans_buffer_read(struct trans_buffer* obj, struct vector* vec) {
+int trans_buffer_recv(struct trans_buffer* obj, struct vector* vec) {
 	if(!obj->containsUnread) {
 		// need to read in data from the socket into the buffer
 		// read in the max (not sure whether good practice)

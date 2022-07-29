@@ -77,22 +77,23 @@ int send_message(int sockfd, char* targetusr, size_t usrsize, char* message, siz
 	return ret;
 }
 
-struct message_t* create_message() {
-	return calloc(sizeof(struct message_t), 1);
+struct command* create_message() {
+	return calloc(sizeof(struct command), 1);
 }
 
-void free_message(struct message_t* msg) {
+void free_message(struct command* msg) {
 	free(msg->sender_user);
 	free(msg->target_user);
 	free(msg->contents);
 	free(msg);
 }
 
-int recv_message(struct trans_buffer* trans_buf, struct message_t* msg) {
+// TODO: switch this to a command parsing function, also create more command structs
+int recv_command(struct trans_buffer* trans_buf, struct command* msg) {
 	struct vector* vec = vector_init(1);
 	char msg_type = COMMS_DEBUG;
 
-	trans_buffer_read(trans_buf, vec);
+	trans_buffer_recv(trans_buf, vec);
 	printf("READ %ld BYTES FROM SOCKET\n", vec->length);
 	hexdump(vec->data, vec->used, 8);
 
