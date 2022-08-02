@@ -5,7 +5,7 @@ Each control message starts with a single character command code, followed by a 
 When a client wants to connect to a server and sit idle, the client sends a "register command", the contents are as follows:
 R                   (command code)
 [TIME]              (sender timestamp (16 char hex))
-[USERNAME LENGTH]   (length of outgoing username (1 byte))
+[USERNAME LENGTH]   (length of outgoing username (2 char hex))
 "USERNAME"          (username string)
 EOT (ascii char 4)
 

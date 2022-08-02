@@ -89,7 +89,7 @@ void free_message(struct command* msg) {
 }
 
 // TODO: switch this to a command parsing function, also create more command structs
-int recv_command(struct trans_buffer* trans_buf, struct command* msg) {
+int parse_command(struct trans_buffer* trans_buf, struct command* msg) {
 	struct vector* vec = vector_init(1);
 	char msg_type = COMMS_DEBUG;
 
