@@ -77,43 +77,7 @@ int send_message(int sockfd, char* targetusr, size_t usrsize, char* message, siz
 	return ret;
 }
 
-struct command* create_message() {
-	return calloc(sizeof(struct command), 1);
-}
-
-void free_message(struct command* msg) {
-	free(msg->sender_user);
-	free(msg->target_user);
-	free(msg->contents);
-	free(msg);
-}
-
 // TODO: switch this to a command parsing function, also create more command structs
-int parse_command(struct trans_buffer* trans_buf, struct command* msg) {
-	struct vector* vec = vector_init(1);
-	char msg_type = COMMS_DEBUG;
-
-	trans_buffer_recv(trans_buf, vec);
-	printf("READ %ld BYTES FROM SOCKET\n", vec->length);
-	hexdump(vec->data, vec->used, 8);
-
-	msg_type = *(char*)(vec->data + 0);
-	msg->sent_time = get_timestamp(vec->data + 2);
-
-	printf("RECEIVING %c MESSAGE\n", msg_type);
-	printf("SENT AT %ld\n", msg->sent_time);
-
-	switch(msg_type) {
-		case COMMS_MESSAGE:
-			
-			break;
-		case COMMS_REGISTER:
-			break;
-		case COMMS_DISCONNECT:
-			break;
-		case COMMS_DEBUG:
-		default:
-			puts("CONNECTION ERROR");
-			break;
-	}
+int parse_command(void* buf, size_t n) {
+	
 }

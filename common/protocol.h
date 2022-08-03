@@ -18,17 +18,7 @@ int send_forward(int sockfd, time_t timestamp, char* sender, size_t sendersize, 
 // TODO: make disconnect reasons an enum
 int send_disconnect(int sockfd, char reason);
 
-// TODO: refine this
-struct message_t {
-	time_t sent_time;
-	char* target_user;
-	char* sender_user;
-	char* contents;
-};
 
-struct message_t* create_message();
-void free_message(struct message_t* message);
-
-int recv_message(struct trans_buffer* trans_buf, struct message_t* msg);
+int parse_command(void* buf, size_t n);
 
 #endif
