@@ -1,23 +1,55 @@
-struct message* msg_create() {
+#include "msg_queue.h"
+#include "utils.h"
 
+#include <pthread.h>
+#include <stdio.h>
+#include <unistd.h>
+
+struct message* msg_init() {
+	struct message* msg = malloc(sizeof(struct message));
+	msg->sender = NULL;
+	msg->target = NULL;
+	msg->contents = NULL;
+	return msg;
 }
 
 int msg_free(struct message* msg) {
-
+	free(msg->sender);
+	free(msg->target);
+	free(msg->contents);
+	free(msg);
 }
 
-int msg_queue_create(struct msg_queue* queue) {
-
+struct msg_queue* msg_queue_init() {
+	struct msg_queue* queue = malloc(sizeof(struct msg_queue));
+	queue->vec = vector_init(sizeof(struct message));
+	queue->front_index = 0;
+	queue->length = 0;
+	return queue;
 }
 
 int msg_queue_free(struct msg_queue* queue) {
-
+	// TODO: free all the messages as well
+	vector_free(queue->vec);
+	free(queue);
 }
 
-int msg_queue_push(struct message* msg) {
+int msg_queue_enqueue(struct msg_queue* queue, struct message* msg) {
+	if (queue->length == queue->vec->capacity) {
+		// more in the queue than can fit, need to resize the vector
+		// simply copy all items before the front item to the back of the vector
+		// then delete the old ones, this will leave empty spaces at the front of the vector
+		// TODO: maybe think of a better algorithm for this
+		for (size_t i = 0; i < queue->front_index; i++) {
+			vector_push_back(queue->vec, vector_get(queue->vec, i));
+		}
+	}
 
+	size_t back_index = (queue->front_index + queue->length) % queue->vec->capacity;
+	vector_set(queue->vec, back_index, msg);
+	queue->length++;
 }
 
-int msg_queue_pop(struct message* msg) {
-
+struct message* msg_queue_dequeue(struct msg_queue* queue) {
+	
 }
