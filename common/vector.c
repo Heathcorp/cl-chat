@@ -8,6 +8,7 @@ struct vector* vector_init(size_t element_size) {
 
 	vec->element_size = element_size;
 	vec->length = 0;
+	vec->capacity = 1;
 
 	vec->used = 0;
 	vec->allocated = element_size;
@@ -34,17 +35,22 @@ int vector_push_back(struct vector* vec, void* element) {
 }
 
 void* vector_get(struct vector* vec, size_t index) {
-	return vec->data + vec->element_size * index;
+	return vec->data + (vec->element_size * index);
 }
 
-int vector_resize(struct vector* vec, size_t length) {
-	size_t newsize = length * vec->element_size;
+int vector_set(struct vector* vec, size_t index, void* element) {
+	return memcpy(vec->data + (index * vec->element_size), element, vec->element_size);
+}
+
+int vector_resize(struct vector* vec, size_t capacity) {
+	size_t newsize = capacity * vec->element_size;
 	if(newsize < vec->used) {
 		return -1;
 	}
 
+	void* newdata = realloc(vec->data, newsize);
 	vec->allocated = newsize;
-	void* newdata = realloc(vec->data, vec->allocated);
+	vec->capacity = capacity;
 
 	if(newdata) {
 		vec->data = newdata;
