@@ -28,7 +28,7 @@ int handle_connection(int sockfd) {
 	trans_buffer_recv(trans_buf, vec);
 
 	// handle the message
-	char msg_type = vec->data[0];
+	char msg_type = *(char*)vector_get(vec, 0);
 
 	switch(msg_type) {
 		case COMMS_MESSAGE:

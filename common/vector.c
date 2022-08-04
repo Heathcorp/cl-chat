@@ -39,7 +39,7 @@ void* vector_get(struct vector* vec, size_t index) {
 }
 
 int vector_set(struct vector* vec, size_t index, void* element) {
-	return memcpy(vec->data + (index * vec->element_size), element, vec->element_size);
+	memcpy(vec->data + (index * vec->element_size), element, vec->element_size);
 }
 
 int vector_resize(struct vector* vec, size_t capacity) {

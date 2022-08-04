@@ -22,7 +22,7 @@ struct msg_queue {
 	size_t length;
 };
 
-int msg_queue_init(struct msg_queue* queue);
+struct msg_queue* msg_queue_init();
 int msg_queue_free(struct msg_queue* queue);
 
 int msg_queue_enqueue(struct msg_queue* queue, struct message* msg);
