@@ -26,6 +26,6 @@ struct msg_queue* msg_queue_init();
 int msg_queue_free(struct msg_queue* queue);
 
 int msg_queue_enqueue(struct msg_queue* queue, struct message* msg);
-struct message* msg_queue_dequeue(struct msg_queue* queue);
+int msg_queue_dequeue(struct msg_queue* queue, struct message* msg);
 
 #endif

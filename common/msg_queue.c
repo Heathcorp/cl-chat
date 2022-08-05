@@ -1,6 +1,7 @@
 #include "msg_queue.h"
 #include "utils.h"
 
+#include <string.h>
 #include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -22,7 +23,7 @@ int msg_free(struct message* msg) {
 
 struct msg_queue* msg_queue_init() {
 	struct msg_queue* queue = malloc(sizeof(struct msg_queue));
-	queue->vec = vector_init(sizeof(struct message));
+	queue->vec = vector_init(sizeof(struct message*));
 	queue->front_index = 0;
 	queue->length = 0;
 	return queue;
@@ -50,6 +51,16 @@ int msg_queue_enqueue(struct msg_queue* queue, struct message* msg) {
 	queue->length++;
 }
 
-struct message* msg_queue_dequeue(struct msg_queue* queue) {
-	
+int msg_queue_dequeue(struct msg_queue* queue, struct message* msg) {
+	if (queue->length < 1) {
+		return -1;
+	}
+
+	struct message** src = vector_get(queue->vec, queue->front_index);
+	memcpy(msg, *src, sizeof(struct message));
+
+	if (queue->length > 1) {
+		queue->front_index++;
+	}
+	queue->length--;
 }
