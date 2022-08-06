@@ -27,6 +27,8 @@ int handle_connection(int sockfd) {
 
 	trans_buffer_recv(trans_buf, vec);
 
+	hexdump(vec->data, vec->used, 8);
+
 	// handle the message
 	char msg_type = *(char*)vector_get(vec, 0);
 

@@ -3,6 +3,8 @@
 
 #include "vector.h"
 
+#include <pthread.h>
+
 struct message {
 	char* sender;
 	char* target;
@@ -20,6 +22,8 @@ struct msg_queue {
 	struct vector* vec;
 	size_t front_index;
 	size_t length;
+
+	pthread_mutex_t lock;
 };
 
 struct msg_queue* msg_queue_init();
