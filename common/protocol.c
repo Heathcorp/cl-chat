@@ -45,14 +45,10 @@ int send_disconnect(int sockfd, char reason) {
 }
 
 int send_register(int sockfd, char* username, size_t bufsize) {
-	size_t n = bufsize + 3;
+	size_t n = bufsize;
 	char* buf = malloc(n);
-
-	// write the username length
-	write_hex_byte((char)bufsize, buf);
-	buf[2] = '\n';
 	// add the username
-	memcpy(buf + 3, username, bufsize);
+	memcpy(buf, username, bufsize);
 
 	int ret = protocol_command(sockfd, 'R', buf, n);
 	free(buf);
@@ -60,17 +56,14 @@ int send_register(int sockfd, char* username, size_t bufsize) {
 }
 
 int send_message(int sockfd, char* targetusr, size_t usrsize, char* message, size_t msgsize) {
-	size_t n = usrsize + 3 + msgsize;
+	size_t n = usrsize + 1 + msgsize;
 	char* buf = malloc(n);
 
 	// copy username
 	memcpy(buf, targetusr, usrsize);
 	buf[usrsize] = '\n';
-	// write message size
-	buf[usrsize + 1] = (char)msgsize;
-	buf[usrsize + 2] = '\n';
 	// copy the message
-	memcpy(buf + usrsize + 3, message, msgsize);
+	memcpy(buf + usrsize + 1, message, msgsize);
 
 	int ret = protocol_command(sockfd, 'M', buf, n);
 	free(buf);
