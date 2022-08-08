@@ -34,6 +34,14 @@ int vector_push_back(struct vector* vec, void* element) {
 	vec->length++;
 }
 
+int vector_delete_back(struct vector* vec) {
+	if (vec->length < 1) {
+		return -1;
+	}
+	vec->length--;
+	vec->used -= vec->element_size;
+}
+
 void* vector_get(struct vector* vec, size_t index) {
 	return vec->data + (vec->element_size * index);
 }
