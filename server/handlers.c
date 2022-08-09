@@ -13,7 +13,7 @@ void* thread_routine(void* config) {
 
 	int thread_connection_count = 0;
 
-	while (1) {
+	while(1) {
 		int client_socket = accept(sockfd, NULL, NULL);
 		printf("New connection: fd:%d; count:%d\n", client_socket, ++thread_connection_count);
 		handle_connection(client_socket);

@@ -71,6 +71,24 @@ int send_message(int sockfd, char* targetusr, size_t usrsize, char* message, siz
 }
 
 // TODO: switch this to a command parsing function, also create more command structs
-int parse_command(void* buf, size_t n) {
-	
+int parse_command(char* buf, size_t n) {
+	char* token = buf;
+
+	time_t timestamp;
+	if(read_timestamp(buf + 2, &timestamp)) {
+		return -1;
+	}
+
+	if(*token == COMMS_REGISTER) {
+
+	} else if(*token == COMMS_DISCONNECT) {
+
+	} else if(*token == COMMS_MESSAGE) {
+
+	} else if(*token == COMMS_DEBUG) {
+		hexdump(buf, n, 8);
+		return -1;
+	} else {
+		return -1;
+	}
 }

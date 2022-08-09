@@ -19,15 +19,18 @@ int write_timestamp(char* dest, time_t t) {
 	}
 }
 
-time_t get_timestamp(char* src) {
-	time_t t = 0;
+int read_timestamp(char* src, time_t* t) {
+	if(verifyhex(src, 16)) {
+		return -1;
+	}
+	time_t readt = 0;
 
 	for(int i = 60; i >= 0; i -= 4) {
 		char hexdigit = hexchar2num(*(src++));
 		t += (long)hexdigit << i;
 	}
-	
-	return t;
+
+	*t = readt;
 }
 
 int write_hex_byte(char byte, char* dest) {
@@ -36,13 +39,13 @@ int write_hex_byte(char byte, char* dest) {
 	dest[0] = num2hexchar(byte);
 }
 
-char get_hex_byte(char* src) {
+char read_hex_byte(char* src) {
 	char byte = hexchar2num(src[0]) << 4;
 	byte += hexchar2num(src[1]);
 	return byte;
 }
 
-char hexchar2num(char hex) {
+int hexchar2num(char hex) {
 	// TODO: check for dodgy values
 	return (hex >= 'a') ? (hex - 87) : (hex - '0');
 }
@@ -50,6 +53,16 @@ char hexchar2num(char hex) {
 char num2hexchar(int digit) {
 	char* charset = "0123456789abcdef";
 	return charset[digit & 0b1111];
+}
+
+int verifyhex(char* buf, size_t n) {
+	for(size_t i = 0; i < n; i++) {
+		if(!(buf[i] >= '0' && buf[i] <= '9') && !(buf[i] >= 'a' && buf[i] <= 'f')) {
+			return -1;
+		}
+	}
+
+	return 0;
 }
 
 int hexdump(void* buf, size_t bufsize, size_t columns) {

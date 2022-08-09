@@ -35,7 +35,7 @@ int vector_push_back(struct vector* vec, void* element) {
 }
 
 int vector_delete_back(struct vector* vec) {
-	if (vec->length < 1) {
+	if(vec->length < 1) {
 		return -1;
 	}
 	vec->length--;

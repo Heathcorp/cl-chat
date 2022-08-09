@@ -19,6 +19,6 @@ int send_forward(int sockfd, time_t timestamp, char* sender, size_t sendersize, 
 int send_disconnect(int sockfd, char reason);
 
 
-int parse_command(void* buf, size_t n);
+int parse_command(char* buf, size_t n);
 
 #endif

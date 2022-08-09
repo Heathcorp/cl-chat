@@ -8,7 +8,7 @@
 #include <arpa/inet.h>
 
 int main(int argc, char* argv[]) {
-	for (int i = 0; i < 1; i++) {
+	for(int i = 0; i < 1; i++) {
 		int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
 		struct sockaddr_in servaddr;

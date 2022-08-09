@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
 
 	struct vector* threads = vector_init(sizeof(pthread_t));
 
-	for (int i = 0; i < 300; i++) {
+	for(int i = 0; i < 300; i++) {
 		struct thread_config conf;
 		conf.socket = sockfd;
 
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 		vector_push_back(threads, &thread);
 	}
 
-	for (int i = 0; i < threads->length; i++) {
+	for(int i = 0; i < threads->length; i++) {
 		pthread_t* thread = vector_get(threads, i);
 
 		pthread_join(*thread, NULL);
