@@ -33,6 +33,7 @@ struct msg_queue* msg_queue_init() {
 }
 
 int msg_queue_free(struct msg_queue* queue) {
+	// TODO: ref counting? semaphores?
 	while(queue->length--) {
 		size_t vec_index = queue->front_index++ % queue->vec->capacity;
 		struct message* msg_ptr = *(struct message**)vector_get(queue->vec, vec_index);

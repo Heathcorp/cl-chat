@@ -18,7 +18,19 @@ int send_forward(int sockfd, time_t timestamp, char* sender, size_t sendersize, 
 // TODO: make disconnect reasons an enum
 int send_disconnect(int sockfd, char reason);
 
+struct command {
+	// TODO: learn enums
+	char type;
 
-int parse_command(char* buf, size_t n);
+	time_t timestamp;
+
+	char* sender;
+	char* target;
+
+	char* contents;
+
+};
+
+int parse_command(char* buf, size_t n, struct command* cmd);
 
 #endif

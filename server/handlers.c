@@ -26,8 +26,8 @@ int handle_connection(int sockfd) {
 	struct trans_buffer* trans_buf = trans_buffer_init(sockfd);
 
 	trans_buffer_recv(trans_buf, vec);
-
-	hexdump(vec->data, vec->used, 8);
+	struct command cmd;
+	parse_command(vec->data, vec->used, &cmd);
 
 	// handle the message
 	char msg_type = *(char*)vector_get(vec, 0);
