@@ -76,21 +76,27 @@ int parse_command(char* buf, size_t n, struct command* cmd) {
 	hexdump(buf, n, 8);
 
 	char* token = buf;
+	
+	// check the command code and timestamp and newlines
+	cmd->type = *token;
+	++token;
+	if(*token != '\n') return -1;
+	++token;
+	if(read_timestamp(buf, &cmd->timestamp)) return -1;
+	token += 16;
+	if(*token != '\n') return -1;
+	++token;
 
-	time_t timestamp;
-	if(read_timestamp(buf + 2, &timestamp)) {
-		return -1;
-	}
+	printf("%c\n", cmd->type);
+	printf("%ld\n", cmd->timestamp);
 
-	printf("%ld\n", timestamp);
+	if(cmd->type == COMMS_REGISTER) {
+		
+	} else if(cmd->type == COMMS_DISCONNECT) {
 
-	if(*token == COMMS_REGISTER) {
+	} else if(cmd->type == COMMS_MESSAGE) {
 
-	} else if(*token == COMMS_DISCONNECT) {
-
-	} else if(*token == COMMS_MESSAGE) {
-
-	} else if(*token == COMMS_DEBUG) {
+	} else if(cmd->type == COMMS_DEBUG) {
 		hexdump(buf, n, 8);
 		return -1;
 	} else {
