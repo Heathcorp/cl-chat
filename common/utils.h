@@ -24,6 +24,8 @@ int hexdump(void* buf, size_t bufsize, size_t rowsize);
 int replace_char(char* buf, size_t bufsize, char target, char replace);
 
 int remove_ctrl(char* buf, size_t bufsize, char replace);
+// copy up to n characters until it reaches char c
+size_t cpync(char* dest, char* src, char c, size_t n);
 
 #define COMMS_REGISTER		'R'
 #define COMMS_MESSAGE		'M'
@@ -31,8 +33,12 @@ int remove_ctrl(char* buf, size_t bufsize, char replace);
 #define COMMS_DEBUG			'0'
 
 #define EOT '\x04'
+#define CR	'\n'
 
 #define TRUE	1
 #define FALSE	0
+
+#define MAX_USERNAME_LENGTH	64
+#define MAX_MESSAGE_LENGTH	256
 
 #endif

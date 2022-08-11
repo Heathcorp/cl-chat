@@ -23,10 +23,10 @@ struct command {
 
 	time_t timestamp;
 
-	char* sender;
-	char* target;
+	char sender[MAX_USERNAME_LENGTH];
+	char target[MAX_USERNAME_LENGTH];
 
-	char* contents;
+	char contents[MAX_MESSAGE_LENGTH];
 
 };
 

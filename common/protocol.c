@@ -16,15 +16,15 @@ int protocol_command(int sockfd, char code, void* contents, size_t bufsize) {
 	char* buf = malloc(n);
 
 	buf[0] = code;
-	buf[1] = '\n';
+	buf[1] = CR;
 	// write the timestamp in hex
 	write_timestamp(buf + 2, millis());
-	buf[18] = '\n';
+	buf[18] = CR;
 
 	// write the contents
 	memcpy(buf + 19, contents, bufsize);
 
-	buf[n - 2] = '\n';
+	buf[n - 2] = CR;
 	buf[n - 1] = EOT;
 
 	// debug print:
@@ -61,7 +61,7 @@ int send_message(int sockfd, char* targetusr, size_t usrsize, char* message, siz
 
 	// copy username
 	memcpy(buf, targetusr, usrsize);
-	buf[usrsize] = '\n';
+	buf[usrsize] = CR;
 	// copy the message
 	memcpy(buf + usrsize + 1, message, msgsize);
 
@@ -80,11 +80,11 @@ int parse_command(char* buf, size_t n, struct command* cmd) {
 	// check the command code and timestamp and newlines
 	cmd->type = *token;
 	++token;
-	if(*token != '\n') return -1;
+	if(*token != CR) return -1;
 	++token;
 	if(read_timestamp(buf, &cmd->timestamp)) return -1;
 	token += 16;
-	if(*token != '\n') return -1;
+	if(*token != CR) return -1;
 	++token;
 
 	printf("%c\n", cmd->type);

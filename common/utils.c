@@ -99,3 +99,7 @@ int remove_ctrl(char* buf, size_t bufsize, char replace) {
 
 	return 0;
 }
+
+size_t cpync(char* dest, char* src, char c, size_t n) {
+	
+}
