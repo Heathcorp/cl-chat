@@ -2,6 +2,7 @@
 #define PROTOCOL_H
 
 #include "trans_buffer.h"
+#include "utils.h"
 
 #include <sys/time.h>
 #include <stddef.h>
@@ -20,7 +21,6 @@ int send_disconnect(int sockfd, char reason);
 struct command {
 	// TODO: learn enums
 	char type;
-
 	time_t timestamp;
 
 	char sender[MAX_USERNAME_LENGTH];

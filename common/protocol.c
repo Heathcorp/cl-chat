@@ -75,6 +75,9 @@ int parse_command(char* buf, size_t n, struct command* cmd) {
 	printf("Parsing a %ld byte transmission:\n", n);
 	hexdump(buf, n, 8);
 
+	// reset the command object
+	memset(cmd, 0, sizeof(struct command));
+
 	char* token = buf;
 	
 	// check the command code and timestamp and newlines
@@ -90,16 +93,48 @@ int parse_command(char* buf, size_t n, struct command* cmd) {
 	printf("%c\n", cmd->type);
 	printf("%ld\n", cmd->timestamp);
 
+	// find the newline character
+	char* eol = strchr(token, CR);
+	size_t linelength = eol - token;
+
 	if(cmd->type == COMMS_REGISTER) {
-		
+		if(linelength > MAX_USERNAME_LENGTH) return -1;
+
+		memcpy(cmd->sender, token, linelength);
+
+		token += linelength + 1;
 	} else if(cmd->type == COMMS_DISCONNECT) {
+		if(linelength > MAX_MESSAGE_LENGTH) return -1;
 
+		memcpy(cmd->contents, token, linelength);
+
+		token += linelength + 1;
 	} else if(cmd->type == COMMS_MESSAGE) {
+		if(linelength > MAX_USERNAME_LENGTH) return -1;
+		memcpy(cmd->sender, token, linelength);
+		token += linelength + 1;
 
+		// get target username line
+		eol = strchr(token, CR);
+		linelength = eol - token;
+		if(linelength > MAX_USERNAME_LENGTH) return -1;
+		memcpy(cmd->target, token, linelength);
+		token += linelength + 1;
+
+		// get message contents line
+		eol = strchr(token, CR);
+		linelength = eol - token;
+		if(linelength > MAX_MESSAGE_LENGTH) return -1;
+		memcpy(cmd->contents, token, linelength);
+		token += linelength + 1;
+
+		// TODO: check for EOT and get hop timestamps
 	} else if(cmd->type == COMMS_DEBUG) {
 		hexdump(buf, n, 8);
 		return -1;
 	} else {
 		return -1;
 	}
+
+	if(*token != EOT) return -1;
 }
