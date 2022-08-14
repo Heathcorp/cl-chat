@@ -101,5 +101,10 @@ int remove_ctrl(char* buf, size_t bufsize, char replace) {
 }
 
 size_t cpync(char* dest, char* src, char c, size_t n) {
-	
+	size_t i = 0;
+	for(; i < n && src[i] != c; i++) {
+		dest[i] = src[i];
+	}
+
+	return i;
 }
