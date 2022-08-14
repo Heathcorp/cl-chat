@@ -25,26 +25,35 @@ int handle_connection(int sockfd) {
 	struct vector* vec = vector_init(1);
 	struct trans_buffer* trans_buf = trans_buffer_init(sockfd);
 
+	// receive a message into the buffer
 	trans_buffer_recv(trans_buf, vec);
-	struct command cmd;
-	parse_command(vec->data, vec->used, &cmd);
 
 	// handle the message
-	char msg_type = *(char*)vector_get(vec, 0);
-
-	switch(msg_type) {
-		case COMMS_MESSAGE:
-			
-			break;
-		case COMMS_REGISTER:
-			break;
-		case COMMS_DISCONNECT:
-			break;
-		case COMMS_DEBUG:
-		default:
-			puts("CONNECTION ERROR");
-			break;
+	struct command cmd;
+	if(parse_command(vec->data, vec->used, &cmd)) {
+		// parse failed
+		puts("Bad message received:");
+		hexdump(vec->data, vec->used, 8);
+		
+	} else {
+		// parse succeeded
+		switch(cmd.type) {
+			case COMMS_REGISTER:
+				printf("New user \"%s\" registered.\n", cmd.sender);
+				break;
+			case COMMS_DISCONNECT:
+				printf("User disconnected, reason: \"%s\".\n", cmd.contents);
+				break;
+			case COMMS_MESSAGE:
+				// printf("New user registered: %s\n", cmd.contents);
+				break;
+			case COMMS_DEBUG:
+			default:
+				break;
+		}
 	}
+
+	
 
 	trans_buffer_free(trans_buf);
 	vector_free(vec);
