@@ -55,15 +55,23 @@ int send_register(int sockfd, char* username, size_t bufsize) {
 	return ret;
 }
 
-int send_message(int sockfd, char* targetusr, size_t usrsize, char* message, size_t msgsize) {
-	size_t n = usrsize + 1 + msgsize;
+int send_message(int sockfd, char* sender, size_t sendersize, char* target, size_t targetsize, char* message, size_t msgsize) {
+	size_t n = sendersize + targetsize + 2 + msgsize;
 	char* buf = malloc(n);
+	char* w = buf;
 
-	// copy username
-	memcpy(buf, targetusr, usrsize);
-	buf[usrsize] = CR;
+	// copy sender username
+	memcpy(w, sender, sendersize);
+	w += sendersize;
+	*w = CR;
+	++w;
+	// copy target username
+	memcpy(w, target, targetsize);
+	w += targetsize;
+	*w = CR;
+	++w;
 	// copy the message
-	memcpy(buf + usrsize + 1, message, msgsize);
+	memcpy(w, message, msgsize);
 
 	int ret = protocol_command(sockfd, 'M', buf, n);
 	free(buf);
@@ -72,9 +80,6 @@ int send_message(int sockfd, char* targetusr, size_t usrsize, char* message, siz
 
 // TODO: switch this to a command parsing function, also create more command structs
 int parse_command(char* buf, size_t n, struct command* cmd) {
-	printf("Parsing a %ld byte transmission:\n", n);
-	hexdump(buf, n, 8);
-
 	// reset the command object
 	memset(cmd, 0, sizeof(struct command));
 
@@ -85,13 +90,10 @@ int parse_command(char* buf, size_t n, struct command* cmd) {
 	++token;
 	if(*token != CR) return -1;
 	++token;
-	if(read_timestamp(buf, &cmd->timestamp)) return -1;
+	if(read_timestamp(token, &cmd->timestamp)) return -1;
 	token += 16;
 	if(*token != CR) return -1;
 	++token;
-
-	printf("%c\n", cmd->type);
-	printf("%ld\n", cmd->timestamp);
 
 	// find the newline character
 	char* eol = strchr(token, CR);
@@ -137,4 +139,6 @@ int parse_command(char* buf, size_t n, struct command* cmd) {
 	}
 
 	if(*token != EOT) return -1;
+
+	return 0;
 }

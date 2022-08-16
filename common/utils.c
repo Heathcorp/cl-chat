@@ -26,11 +26,13 @@ int read_timestamp(char* src, time_t* t) {
 	time_t readt = 0;
 
 	for(int i = 60; i >= 0; i -= 4) {
-		char hexdigit = hexchar2num(*(src++));
-		t += (long)hexdigit << i;
+		char hexdigit = hexchar2num(*src);
+		++src;
+		readt += (long)hexdigit << i;
 	}
 
 	*t = readt;
+	return 0;
 }
 
 int write_hex_byte(char byte, char* dest) {

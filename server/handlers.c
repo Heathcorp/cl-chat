@@ -25,6 +25,7 @@ int handle_connection(int sockfd) {
 	struct vector* vec = vector_init(1);
 	struct trans_buffer* trans_buf = trans_buffer_init(sockfd);
 
+	for(int i = 3; i--;) {
 	// receive a message into the buffer
 	trans_buffer_recv(trans_buf, vec);
 
@@ -45,7 +46,7 @@ int handle_connection(int sockfd) {
 				printf("User disconnected, reason: \"%s\".\n", cmd.contents);
 				break;
 			case COMMS_MESSAGE:
-				// printf("New user registered: %s\n", cmd.contents);
+				printf("Message from \"%s\" to \"%s\":\n%s\n", cmd.sender, cmd.target, cmd.contents);
 				break;
 			case COMMS_DEBUG:
 			default:
@@ -53,7 +54,7 @@ int handle_connection(int sockfd) {
 		}
 	}
 
-	
+	}
 
 	trans_buffer_free(trans_buf);
 	vector_free(vec);

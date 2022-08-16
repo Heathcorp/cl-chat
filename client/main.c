@@ -20,6 +20,8 @@ int main(int argc, char* argv[]) {
 		connect(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
 
 		send_register(sockfd, "grouchy garry guards greatly", 28);
+		send_register(sockfd, "smokin sam signs secretly", 25);
+		send_message(sockfd, "user_666", 8, "grant", 5, "I ate all the frozen rocks in the tool chest.", 45);
 
 		close(sockfd);
 	}
