@@ -1,28 +1,32 @@
 #include "../common/protocol.h"
 #include "../common/utils.h"
+#include "handlers.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <pthread.h>
 
 int main(int argc, char* argv[]) {
-	for(int i = 0; i < 1; i++) {
-		int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
-		struct sockaddr_in servaddr;
-		servaddr.sin_family = AF_INET;
-		servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-		servaddr.sin_port = htons(3030);
+	struct sockaddr_in servaddr;
+	servaddr.sin_family = AF_INET;
+	servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	servaddr.sin_port = htons(3030);
 
-		printf("Attempting connection %d\n", i);
-		connect(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
+	connect(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
 
-		send_register(sockfd, "grouchy garry guards greatly", 28);
-		send_register(sockfd, "smokin sam signs secretly", 25);
-		send_message(sockfd, "user_666", 8, "grant", 5, "I ate all the frozen rocks in the tool chest.", 45);
+	struct thread_config conf;
 
-		close(sockfd);
-	}
+	pthread_t recv_thread, send_thread;
+	pthread_create(&recv_thread, NULL, recv_routine, &conf);
+	pthread_create(&send_thread, NULL, send_routine, &conf);
+
+	pthread_join(recv_thread, NULL);
+	pthread_join(send_thread, NULL);
+
+	close(sockfd);
 }
