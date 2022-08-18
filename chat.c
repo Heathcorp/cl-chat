@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 		conf.sockfd = create_client(address, port);
 	}
 
-	if (conf.sockfd) {
+	if (conf.sockfd == -1) {
 		logmsg(&sys, "Connection failed");
 		return -1;
 	}
