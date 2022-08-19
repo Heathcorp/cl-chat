@@ -38,21 +38,14 @@ int protocol_command(int sockfd, char code, void* contents, size_t bufsize) {
 
 int send_disconnect(int sockfd, char reason) {
 	size_t n = 1;
-	char* buf = " ";
+	char buf[1];
 	buf[0] = reason;
 
 	return protocol_command(sockfd, 'Q', buf, n);
 }
 
 int send_register(int sockfd, char* username, size_t bufsize) {
-	size_t n = bufsize;
-	char* buf = malloc(n);
-	// add the username
-	memcpy(buf, username, bufsize);
-
-	int ret = protocol_command(sockfd, 'R', buf, n);
-	free(buf);
-	return ret;
+	return protocol_command(sockfd, 'R', username, bufsize);;
 }
 
 int send_message(int sockfd, char* sender, size_t sendersize, char* target, size_t targetsize, char* message, size_t msgsize) {
