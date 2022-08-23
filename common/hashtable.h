@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 
+typedef signed int ht_key
 // defines a linear-probing hashtable structure with integer keys
 struct hashtable {
 	void* data;
@@ -10,6 +11,8 @@ struct hashtable {
 
 	// size in bytes of individual element values
 	size_t element_size;
+	// size in bytes of each element unit (sizeof(ht_key) + element_size)
+	size_t unit_size;
 	// allocated / (element_size + sizeof(int)): the number of elements it can fit at maximum
 	size_t capacity;
 	// number of elements currently set
