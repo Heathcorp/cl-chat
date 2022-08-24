@@ -24,7 +24,25 @@ int hashtable_free(struct hashtable* ht) {
 
 
 void* hashtable_get(struct hashtable* ht, int key) {
+	int hash = key;
+	void* element;
+	int element_key;
+	do {
+		// hash function is simply modulo
+		hash = hash % ht->capacity;
+		element = ht->data + (hash * ht->unit_size);
+		element_key = *(int*)element;
 
+		if(!element_key) {
+			// found an empty slot before finding the key
+			return NULL;
+		}
+
+		hash++;
+	} while(element_key != key);
+
+	// get the element assigned to that key
+	return element + sizeof(ht_key);
 }
 
 int hashtable_set(struct hashtable* ht, int key, void* element) {

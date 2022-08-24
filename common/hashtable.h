@@ -3,8 +3,10 @@
 
 #include <stdlib.h>
 
-typedef signed int ht_key
 // defines a linear-probing hashtable structure with integer keys
+
+typedef int ht_key;
+
 struct hashtable {
 	void* data;
 	size_t allocated;
