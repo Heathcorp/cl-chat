@@ -1,6 +1,7 @@
 #include "hashtable.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 struct hashtable* hashtable_init(size_t element_size, size_t capacity) {
 	struct hashtable* ht = malloc(sizeof(struct hashtable));
@@ -23,7 +24,7 @@ int hashtable_free(struct hashtable* ht) {
 }
 
 
-void* hashtable_get(struct hashtable* ht, int key) {
+void* hashtable_get(struct hashtable* ht, ht_key key) {
 	int hash = key;
 	void* element;
 	int element_key;
@@ -45,8 +46,27 @@ void* hashtable_get(struct hashtable* ht, int key) {
 	return element + sizeof(ht_key);
 }
 
-int hashtable_set(struct hashtable* ht, int key, void* element) {
+int hashtable_set(struct hashtable* ht, ht_key key, void* element) {
+	if(ht->count >= ht->capacity) return -1;
 
+	int hash = key;
+	void* space;
+	int element_key;
+
+	do {
+		hash = hash % ht->capacity;
+		space = ht->data + (hash * ht->unit_size);
+		element_key = *(int*)space;
+		// do this until it finds an empty spot or this key already
+	} while(element_key && element_key != key);
+
+	*(int*)space = key;
+	// advanced the pointer to the space where the element is stored
+	space += sizeof(ht_key);
+	// TODO: check for errors and stuff
+	memcpy(space, element, ht->element_size);
+
+	return 0;
 }
 
 int hashtable_delete(struct hashtable* ht, int key) {

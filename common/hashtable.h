@@ -24,8 +24,8 @@ struct hashtable {
 struct hashtable* hashtable_init(size_t element_size, size_t capacity);
 int hashtable_free(struct hashtable* ht);
 
-void* hashtable_get(struct hashtable* ht, int key);
-int hashtable_set(struct hashtable* ht, int key, void* element);
-int hashtable_delete(struct hashtable* ht, int key);
+void* hashtable_get(struct hashtable* ht, ht_key key);
+int hashtable_set(struct hashtable* ht, ht_key key, void* element);
+int hashtable_delete(struct hashtable* ht, ht_key key);
 
 #endif
