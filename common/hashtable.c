@@ -70,5 +70,26 @@ int hashtable_set(struct hashtable* ht, ht_key key, void* element) {
 }
 
 int hashtable_delete(struct hashtable* ht, int key) {
+	if(ht->count >= ht->capacity) return -1;
 
+	int hash = key;
+	void* space;
+	int element_key;
+
+	do {
+		hash = hash % ht->capacity;
+		space = ht->data + (hash * ht->unit_size);
+		element_key = *(int*)space;
+		// do this until it finds an empty spot or this key already
+
+		if(!element_key) {
+			// key not in the table
+			return -1;
+		}
+	} while(element_key != key);
+
+	// TODO: check for errors and stuff
+	memset(space, 0, ht->unit_size);
+
+	return 0;
 }
