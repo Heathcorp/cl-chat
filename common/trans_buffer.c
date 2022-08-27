@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <sys/select.h>
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -44,13 +45,27 @@ size_t copyUntilEOT(char* dest, char* src, size_t max) {
 
 int trans_buffer_recv(struct trans_buffer* obj, struct vector* vec) {
 	if(!obj->containsUnread) {
-		// need to read in data from the socket into the buffer
+		// TODO: this whole thing is dodgy
+		// need to wait until there's data in the socket
+		// TODO: select is geriatric, redesign program and algorithm and switch to poll
+		fd_set set;
+		FD_ZERO(&set);
+		FD_SET(obj->sockfd, &set);
+
+		if(select(FD_SETSIZE, &set, NULL, NULL, NULL) == -1) {
+			return -1;	
+		}
+		// really bad here: I haven't even checked the socket using FD_ISSET
+
+		// read in data from the socket into the buffer
 		// read in the max (not sure whether good practice)
 		size_t recved = recv(obj->sockfd, obj->data, obj->allocated, 0);
+
 		// TODO: handle errors (recved = -1)
 		obj->length = recved;
 		obj->containsUnread = TRUE;
 		obj->readLength = 0;
+		// printf("Read %ld bytes from fd %d\n", recved, obj->sockfd);
 	}
 
 	// read the unread data from the buffer
@@ -61,11 +76,14 @@ int trans_buffer_recv(struct trans_buffer* obj, struct vector* vec) {
 
 	// copy the unread data from the buffer until it finds an EOT byte
 	size_t copied = copyUntilEOT(vec->data, unreadStart, unreadSize);
-	obj->readLength = copied;
 	vec->used = copied;
 	vec->length = copied;
 
-	if(copied == unreadSize) {
+	obj->readLength += copied;
+
+	// printf("Copied %ld into vector buffer of %ld in transmission buffer.\n", copied, unreadSize);
+
+	if(obj->readLength >= obj->length) {
 		// buffer is empty, only one transmission was 'waiting' in the socket
 		// TODO: handle the following case
 		// currently this shouldn't happen because the messages I'm sending are really small

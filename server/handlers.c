@@ -21,13 +21,15 @@ void* thread_routine(void* config) {
 }
 
 int handle_connection(int sockfd) {
-	// TODO: put this in its own recv thread
+	// TODO: put this in its own recv thread/rethink threading
 	struct vector* vec = vector_init(1);
 	struct trans_buffer* trans_buf = trans_buffer_init(sockfd);
 
-	for(int i = 3; i--;) {
+	// TODO: redesign loop
+	for(int i = 7; i--;) {
 	// receive a message into the buffer
 	trans_buffer_recv(trans_buf, vec);
+	hexdump(vec->data, vec->used, 8);
 
 	// handle the message
 	struct command cmd;

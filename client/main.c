@@ -20,6 +20,7 @@ int main(int argc, char* argv[]) {
 	connect(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
 
 	struct thread_config conf;
+	conf.sockfd = sockfd;
 
 	pthread_t recv_thread, send_thread;
 	pthread_create(&recv_thread, NULL, recv_routine, &conf);
