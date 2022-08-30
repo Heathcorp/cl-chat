@@ -5,7 +5,7 @@
 
 #include <pthread.h>
 
-struct message {
+struct msg_t {
 	char* sender;
 	char* target;
 	char* contents;
@@ -13,8 +13,8 @@ struct message {
 	// struct vector* hops;
 };
 
-struct message* msg_init();
-int msg_free(struct message* msg);
+struct msg_t* msg_init();
+int msg_free(struct msg_t* msg);
 
 // thread safe queue for message structs
 struct msg_queue {
@@ -29,7 +29,7 @@ struct msg_queue {
 struct msg_queue* msg_queue_init();
 int msg_queue_free(struct msg_queue* queue);
 
-int msg_queue_enqueue(struct msg_queue* queue, struct message* msg);
-int msg_queue_dequeue(struct msg_queue* queue, struct message* msg);
+int msg_queue_enqueue(struct msg_queue* queue, struct msg_t* msg);
+int msg_queue_dequeue(struct msg_queue* queue, struct msg_t* msg);
 
 #endif

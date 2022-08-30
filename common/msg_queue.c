@@ -6,15 +6,15 @@
 #include <stdio.h>
 #include <unistd.h>
 
-struct message* msg_init() {
-	struct message* msg = malloc(sizeof(struct message));
+struct msg_t* msg_init() {
+	struct msg_t* msg = malloc(sizeof(struct msg_t));
 	msg->sender = NULL;
 	msg->target = NULL;
 	msg->contents = NULL;
 	return msg;
 }
 
-int msg_free(struct message* msg) {
+int msg_free(struct msg_t* msg) {
 	free(msg->sender);
 	free(msg->target);
 	free(msg->contents);
@@ -23,7 +23,7 @@ int msg_free(struct message* msg) {
 
 struct msg_queue* msg_queue_init() {
 	struct msg_queue* queue = malloc(sizeof(struct msg_queue));
-	queue->vec = vector_init(sizeof(struct message*));
+	queue->vec = vector_init(sizeof(struct msg_t*));
 	queue->front_index = 0;
 	queue->length = 0;
 	
@@ -36,7 +36,7 @@ int msg_queue_free(struct msg_queue* queue) {
 	// TODO: ref counting? semaphores?
 	while(queue->length--) {
 		size_t vec_index = queue->front_index++ % queue->vec->capacity;
-		struct message* msg_ptr = *(struct message**)vector_get(queue->vec, vec_index);
+		struct msg_t* msg_ptr = *(struct msg_t**)vector_get(queue->vec, vec_index);
 		free(msg_ptr);
 	}
 
@@ -46,7 +46,7 @@ int msg_queue_free(struct msg_queue* queue) {
 	free(queue);
 }
 
-int msg_queue_enqueue(struct msg_queue* queue, struct message* msg) {
+int msg_queue_enqueue(struct msg_queue* queue, struct msg_t* msg) {
 
 	pthread_mutex_lock(&queue->lock);
 
@@ -68,7 +68,7 @@ int msg_queue_enqueue(struct msg_queue* queue, struct message* msg) {
 	pthread_mutex_unlock(&queue->lock);
 }
 
-int msg_queue_dequeue(struct msg_queue* queue, struct message* msg) {
+int msg_queue_dequeue(struct msg_queue* queue, struct msg_t* msg) {
 
 	pthread_mutex_lock(&queue->lock);
 
@@ -76,8 +76,8 @@ int msg_queue_dequeue(struct msg_queue* queue, struct message* msg) {
 		return -1;
 	}
 
-	struct message** src = vector_get(queue->vec, queue->front_index);
-	memcpy(msg, *src, sizeof(struct message));
+	struct msg_t** src = vector_get(queue->vec, queue->front_index);
+	memcpy(msg, *src, sizeof(struct msg_t));
 
 	if(queue->length > 1) {
 		queue->front_index = (queue->front_index + 1) % queue->vec->capacity;
