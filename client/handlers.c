@@ -28,10 +28,14 @@ void* send_routine(void* conf) {
 	usrsize = getline(&msg->target, &n, stdin) - 1;
 	msg->target[usrsize] = '\0';
 
-	puts("---CONVERSATION BEGIN---");
+	printf("Starting conversation with \"%s\", type \"/end\" to finish.\n", msg->target);
 	for(;;) {
 		size_t msgsize = getline(&msg->contents, &n, stdin) - 1;
 		msg->contents[msgsize] = '\0';
+
+		if(strcmp(msg->contents, "/end") == 0) {
+			break;
+		}
 
 		send_message(sockfd, msg->sender, 5, msg->target, 5, msg->contents, msgsize);
 	}
