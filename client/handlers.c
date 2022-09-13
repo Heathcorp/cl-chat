@@ -20,13 +20,13 @@ void* send_routine(void* conf) {
 	struct msg_t* msg = msg_init();
 
 	size_t n = 0;
-	size_t usrsize = getline(&msg->sender, &n, stdin) - 1;
-	msg->sender[usrsize] = '\0';
-	send_register(sockfd, msg->sender, usrsize);
+	size_t sendersize = getline(&msg->sender, &n, stdin) - 1;
+	msg->sender[sendersize] = '\0';
+	send_register(sockfd, msg->sender, sendersize);
 
 	puts("Enter the user you want to talk to:");
-	usrsize = getline(&msg->target, &n, stdin) - 1;
-	msg->target[usrsize] = '\0';
+	size_t targetsize = getline(&msg->target, &n, stdin) - 1;
+	msg->target[targetsize] = '\0';
 
 	printf("Starting conversation with \"%s\", type \"/end\" to finish.\n", msg->target);
 	for(;;) {
@@ -37,7 +37,7 @@ void* send_routine(void* conf) {
 			break;
 		}
 
-		send_message(sockfd, msg->sender, 5, msg->target, 5, msg->contents, msgsize);
+		send_message(sockfd, msg->sender, sendersize, msg->target, targetsize, msg->contents, msgsize);
 	}
 
 	msg_free(msg);
