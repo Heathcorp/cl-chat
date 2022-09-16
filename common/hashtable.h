@@ -21,6 +21,8 @@ struct hashtable {
 	size_t count;
 };
 
+ht_key ht_hash(struct hashtable* ht, void* element);
+
 struct hashtable* hashtable_init(size_t element_size, size_t capacity);
 int hashtable_free(struct hashtable* ht);
 

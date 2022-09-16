@@ -23,6 +23,13 @@ int hashtable_free(struct hashtable* ht) {
 	free(ht);
 }
 
+ht_key ht_hash(struct hashtable* ht, void* element) {
+	int hash = 0;
+	for(int i = 0; i < ht->element_size; i++) {
+		hash += (char*)element[i];
+	}
+	return hash % ht->capacity;
+}
 
 void* hashtable_get(struct hashtable* ht, ht_key key) {
 	int hash = key;

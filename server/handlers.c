@@ -26,7 +26,7 @@ int handle_connection(int sockfd) {
 	struct trans_buffer* trans_buf = trans_buffer_init(sockfd);
 
 	// TODO: redesign loop
-	for(int i = 7; i--;) {
+	for(int i = 7; i--; ) {
 	// receive a message into the buffer
 	trans_buffer_recv(trans_buf, vec);
 	hexdump(vec->data, vec->used, 8);
@@ -43,12 +43,18 @@ int handle_connection(int sockfd) {
 		switch(cmd.type) {
 			case COMMS_REGISTER:
 				printf("New user \"%s\" registered.\n", cmd.sender);
+				// create a new message queue and put into the master table
+
 				break;
 			case COMMS_DISCONNECT:
 				printf("User disconnected, reason: \"%s\".\n", cmd.contents);
+				// mark message queue for closing
+
 				break;
 			case COMMS_MESSAGE:
 				printf("Message from \"%s\" to \"%s\":\n%s\n", cmd.sender, cmd.target, cmd.contents);
+				// get the message queue from the master table and put a message into it
+				
 				break;
 			case COMMS_DEBUG:
 			default:
