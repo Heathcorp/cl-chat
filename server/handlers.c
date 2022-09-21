@@ -7,6 +7,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <stdio.h>
+#include <pthread.h>
 
 void* thread_routine(void* config) {
 	int sockfd = ((struct thread_config*)config)->socket;

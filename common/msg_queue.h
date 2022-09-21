@@ -7,7 +7,6 @@
 
 struct msg_t {
 	char* sender;
-	char* target;
 	char* contents;
 
 	// struct vector* hops;

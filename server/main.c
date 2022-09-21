@@ -1,6 +1,8 @@
 #include "../common/vector.h"
 #include "../common/protocol.h"
 #include "../common/utils.h"
+#include "../common/hashtable.h"
+#include "../common/msg_queue.h"
 #include "handlers.h"
 
 #include <pthread.h>
@@ -11,8 +13,16 @@
 #include <sys/select.h>
 #include <arpa/inet.h>
 
+#include <pthread.h>
+
+#define HASHTABLE_CAPACITY	10000
+struct hashtable* user_table;
+pthread_mutex_t uq_mutex;
+
 int main(int argc, char *argv[]) {
 	puts("STARTING...");
+
+	user_table = hashtable_init(sizeof(struct msg_queue), HASHTABLE_CAPACITY);
 
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -42,4 +52,6 @@ int main(int argc, char *argv[]) {
 
 		pthread_join(*thread, NULL);
 	}
+
+	hashtable_free(user_table);
 }
